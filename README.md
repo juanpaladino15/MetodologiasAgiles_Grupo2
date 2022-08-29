@@ -2,3 +2,4 @@
 ## Integrantes
 ### Emanuel Rodriguez Rodriguez
 ### Santiago Miguel Díaz
+### Juan Cruz Paladino
