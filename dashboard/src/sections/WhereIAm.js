@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
-import Switch from '@mui/material/Switch';
 import config from '../config.js'
 
 
@@ -25,7 +24,7 @@ function WhereIAm(props){
 			item
 		>
 		<Typography variant="h3">
-			Donde estara hoy?
+			Donde estoy hoy?
 		</Typography>
 		<Box
 			sx={{
@@ -38,9 +37,10 @@ function WhereIAm(props){
 		>
 			<Formik
 				initialValues={{
-					username:'',
-					passwd:'',
-					aparcador:false
+					calle:'',
+					calle1:'',
+					calle2:'',
+					aparcador:true
 				}}
 				onSubmit={(values)=>{
 					var p =null
@@ -50,9 +50,9 @@ function WhereIAm(props){
 						body: JSON.stringify(values)
 					}
 					if(values.aparcador)
-						p = fetch(config.api.host + "/v1/driver/login",options)
-					else
-						p = fetch(config.api.host + "/v1/parking/login",options)
+						p = fetch(config.api.host + "/v1/parking/whereiam",options)
+					// else
+					// 	p = fetch(config.api.host + "/v1/driver/whreIAm",options)
 					p.then(ok=>{
 						if(ok.status === 200)
 							console.log("Paso autenticación")
@@ -76,23 +76,23 @@ function WhereIAm(props){
 							<TextField
 								label='Calle'
 								name='calle'
-								value={values.user}
+								value={values.calle}
 								onChange={handleChange}
 							/>
 						</Grid>
 						<Grid item>
 							<TextField
 								label='Entre Calle'
-								name='Entre1'
-								value={values.passwd}
+								name='calle1'
+								value={values.calle1}
 								onChange={handleChange}
 							/>
 						</Grid>
 						<Grid item>
 							<TextField
 								label='Entre Calle'
-								name='entre2'
-								value={values.passwd}
+								name='calle2'
+								value={values.calle2}
 								onChange={handleChange}
 							/>
 						</Grid>
