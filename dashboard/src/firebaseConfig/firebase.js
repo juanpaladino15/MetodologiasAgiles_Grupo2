@@ -1,5 +1,9 @@
 
+//para instalar firebase al proyecto npm install firebase 
+
 import { initializeApp } from "firebase/app";
+
+import { getFirestore } from "@firebase/firestore"
 
 const firebaseConfig = {
   apiKey: "AIzaSyA6bvsBEjWfSZbUKPw7rFpt5MY2NOsRmQ8",
@@ -11,3 +15,5 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+export const db = getFirestore(app)
