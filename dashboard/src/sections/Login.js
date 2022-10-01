@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom"
 import { Formik, Form } from 'formik';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
-import Typography from '@mui/material/Typography';
 import Switch from '@mui/material/Switch';
-import config from '../config.js'
+import { useCookies } from "react-cookie";
+//import config from '../config.js'
 
 function Login(props){
 
 	const [alertMessage,setAlertMessage] = useState(null)
+
+	const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+
+	let history = useHistory();
 
 	return(
 		<Grid
@@ -24,9 +29,6 @@ function Login(props){
 		<Grid
 			item
 		>
-		<Typography variant="h3">
-			Trapito
-		</Typography>
 		<Box
 			sx={{
 				paddingTop:"30px",
@@ -43,25 +45,21 @@ function Login(props){
 					aparcador:false
 				}}
 				onSubmit={(values)=>{
-					var p =null
-					const options = {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify(values)
+					if(!values.aparcador){
+						if(values.username === 'conductor@test.com.ar'
+						&& values.passwd === 'AgilesConductor'){
+							setCookie("token", "untoken", { path: "/" });
+      					history.push("/searchparking")
+						} else
+							setAlertMessage("Usuario invalido")
+					} else {
+						if(values.username === 'trapito@test.com.ar'
+						&& values.passwd === 'AgilesTrapito'){
+							setCookie("token", "untoken", { path: "/" });
+      					history.push("/whereiam")
+						} else
+							setAlertMessage("Usuario invalido")
 					}
-					if(values.aparcador)
-						p = fetch(config.api.host + "/v1/driver/login",options)
-					else
-						p = fetch(config.api.host + "/v1/parking/login",options)
-					p.then(ok=>{
-						if(ok.status === 200)
-							console.log("Paso autenticación")
-						else
-							setAlertMessage("Usuario inválido")
-					})
-					.catch(err=>{
-						setAlertMessage("Api no responde")
-					})
 				}}
 
 			render={({values,setFieldValue,handleChange}) => (
