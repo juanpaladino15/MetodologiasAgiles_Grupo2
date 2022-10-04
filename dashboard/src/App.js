@@ -6,8 +6,7 @@ import Show from './components/Show';
 function App() {
   return (
 	<BrowserRouter>
-		<MyRoutes />
-		<Show />
+		<MyRoutes />		
 	</BrowserRouter>
   )
 }

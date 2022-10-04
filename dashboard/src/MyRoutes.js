@@ -5,6 +5,7 @@ import SearchParking from './sections/SearchParking.js'
 import Parking from './sections/Parking.js'
 import Login from './sections/Login.js'
 import NoPage from './NoPage.js'
+import Show from "./components/Show.js"
 
 function MyRoutes(props){
 	return(
@@ -19,7 +20,7 @@ function MyRoutes(props){
 			{/* Para el conducor */}
 			<Route path='/searchparking' element={<SearchParking/>}/>
 			<Route path='/parking' element={<Parking/>}/>
-			
+			<Route path='/Show' element={<Show/>}/>
 			{/* La pagina no existe */}
 			<Route path="*" element={<NoPage/>}/>
 		</Routes>
