@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
 import { useCookies } from "react-cookie";
 //import config from '../config.js'
 
@@ -28,9 +29,16 @@ function Login(props){
 		>
 		<Grid
 			item
+			sx={{
+				marginTop: "60px"
+			}}
 		>
+		<Typography variant="h3">
+			Parking App
+		</Typography>
 		<Box
 			sx={{
+				marginTop: "50px",
 				paddingTop:"30px",
 				width: "400px",
 				height: "300px",
