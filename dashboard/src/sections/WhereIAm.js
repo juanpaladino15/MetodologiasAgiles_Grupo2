@@ -22,12 +22,16 @@ function WhereIAm(props){
 		>
 		<Grid
 			item
+			sx={{
+				marginTop: "60px"
+			}}
 		>
 		<Typography variant="h3">
-			Donde estoy hoy?
+			Donde va a estar hoy?
 		</Typography>
 		<Box
 			sx={{
+				marginTop: "50px",
 				paddingTop:"30px",
 				width: "400px",
 				height: "300px",
@@ -51,8 +55,7 @@ function WhereIAm(props){
 					}
 					if(values.aparcador)
 						p = fetch(config.api.host + "/v1/parking/whereiam",options)
-					// else
-					// 	p = fetch(config.api.host + "/v1/driver/whreIAm",options)
+					
 					p.then(ok=>{
 						if(ok.status === 200)
 							console.log("Paso autenticación")
