@@ -6,12 +6,12 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "@firebase/firestore"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA6bvsBEjWfSZbUKPw7rFpt5MY2NOsRmQ8",
-  authDomain: "g2agiles2022.firebaseapp.com",
-  projectId: "g2agiles2022",
-  storageBucket: "g2agiles2022.appspot.com",
-  messagingSenderId: "804659025270",
-  appId: "1:804659025270:web:024550fa5ca36a4e025657"
+  apiKey: "AIzaSyCWImzpXtGFxlT78H4SibJRafdDm7bT1kg",
+  authDomain: "trapitos-test.firebaseapp.com",
+  projectId: "trapitos-test",
+  storageBucket: "trapitos-test.appspot.com",
+  messagingSenderId: "548919502851",
+  appId: "1:548919502851:web:67704ecbafe85c912bc636"
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
