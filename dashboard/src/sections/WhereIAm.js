@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
+import { useHistory } from "react-router-dom"
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -11,6 +12,7 @@ import config from '../config.js'
 
 function WhereIAm(props){
 	const [alertMessage,setAlertMessage] = useState(null)
+	let history = useHistory();
 
 	return(
 		<Grid
@@ -47,24 +49,36 @@ function WhereIAm(props){
 					aparcador:true
 				}}
 				onSubmit={(values)=>{
-					var p =null
-					const options = {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify(values)
+
+					if(values.calle != '' && values.calle1 != '' && values.calle2 != ''){
+						// var p =null
+						// const options = {
+						// 	method: "POST",
+						// 	headers: { "Content-Type": "application/json" },
+						// 	body: JSON.stringify(values)
+						// }
+						
+						// p = fetch(config.api.host + "/v1/parking/whereiam",options)
+
+						// p.then(ok=>{
+						// if(ok.status === 200)
+						// 	if(values.username === 'conductor@test.com.ar'
+						// 	&& values.passwd === 'AgilesConductor'){
+						// 		setCookie("token", "untoken", { path: "/" });
+      					// 		history.push("/searchparking")
+						// 	} else
+						// 		setAlertMessage("Usuario invalido")
+						// })
+						history.push("/thereareparking")
+
+					}else{
+							setAlertMessage("Api no responde")
+						// .catch(err=>{
+						// 	setAlertMessage("Api no responde")
+						// })
+
 					}
-					if(values.aparcador)
-						p = fetch(config.api.host + "/v1/parking/whereiam",options)
-					
-					p.then(ok=>{
-						if(ok.status === 200)
-							console.log("Paso autenticación")
-						else
-							setAlertMessage("Usuario inválido")
-					})
-					.catch(err=>{
-						setAlertMessage("Api no responde")
-					})
+						
 				}}
 
 			render={({values,setFieldValue,handleChange}) => (
