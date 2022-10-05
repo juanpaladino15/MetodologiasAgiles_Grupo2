@@ -8,7 +8,6 @@ import NoPage from './NoPage.js'
 import Show from "./components/Show.js"
 import Create from "./components/Create.js"
 import Edit from "./components/Edit.js"
-//import SearchParking  from "./components/SearchParking.js"
 
 function MyRoutes(props){
 	return(
@@ -23,8 +22,7 @@ function MyRoutes(props){
 			{/* Para el conducor */}
 			<Route path='/search' element={<SearchParking/>}/>
 			<Route path='/parking' element={<Parking/>}/>
-			//<Route path='/Show' element={<Show />} />
-			//<Route path='/SearchParking' element={<SearchParking />} />
+			//<Route path='/Show' element={<Show />} />			
 			//<Route path='/Create' element={<Create />} />
 			//<Route path='/Edit/:id' element={<Edit />} />
 			{/* La pagina no existe */}

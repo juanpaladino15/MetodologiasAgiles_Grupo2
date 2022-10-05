@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom'
 
 
 import { db } from '../firebaseConfig/firebase'
-import { collection, getDocs, getDoc, deleteDoc, doc, where } from 'firebase/firestore'
-import { async } from '@firebase/util'
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore'
 
 import Swal from 'sweetalert2'  //npm i sweetalert2
 import withReactContent from 'sweetalert2-react-content' //npm i sweetalert2-react-content
+
 
 const MySwal = withReactContent(Swal)
 
@@ -95,9 +95,11 @@ const Show = () => {
                                     <td>{direccion.Calle}</td>
                                     <td>{direccion.entre1}</td>
                                     <td>{direccion.entre2}</td>
-                                    <td>{direccion.estado}</td>
+                                    <td>{
+                                    <input type="checkbox" checked={direccion.estado} disabled></input>}
+                                    </td>                                    
                                     <td>
-                                        <Link to={'/edit/${direccion.id}'} className='btn btn-ligth'>Editar</Link>
+                                        <Link to={`/edit/${direccion.id}`} className='btn btn-ligth'>Editar</Link>
                                         <button onClick={ () => { confirmDelete(direccion.id) } } className="btn btn-danger">Borrar</button>
                                     </td>
 
