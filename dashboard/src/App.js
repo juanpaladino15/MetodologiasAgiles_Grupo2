@@ -1,16 +1,16 @@
 import './App.css';
-import { BrowserRouter } from "react-router-dom"
+import { BrowserRouter as Router} from "react-router-dom"
 import MyRoutes from './MyRoutes.js'
 import { Container } from '@mui/material';
 
 function App() {
-	return (
-		<Container>
-			<BrowserRouter>
-				<MyRoutes />
-			</BrowserRouter>
-		</Container>
-	)
+
+  return (
+	<Router>
+		<MyRoutes />
+	</Router>
+  )
+
 }
 
 export default App;
