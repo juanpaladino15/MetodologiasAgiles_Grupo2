@@ -82,7 +82,7 @@ function Login(props){
 							<TextField
 								label='Usuario'
 								name='username'
-								value={values.user}
+								value={values.username}
 								onChange={handleChange}
 							/>
 						</Grid>
@@ -90,6 +90,7 @@ function Login(props){
 							<TextField
 								label='Contraseña'
 								name='passwd'
+								type="password"
 								value={values.passwd}
 								onChange={handleChange}
 							/>
@@ -104,8 +105,18 @@ function Login(props){
 							<Grid item>
 								<Switch
 									onChange={
-										(value) => setFieldValue("aparcador",value)
+										(e) => {
+											setFieldValue("aparcador",!values.aparcador)
+											if(!values.aparcador){
+												setFieldValue("username","trapito@test.com.ar")
+												setFieldValue("passwd","AgilesTrapito")
+											} else {
+												setFieldValue("username","conductor@test.com.ar")
+												setFieldValue("passwd","AgilesConductor")
+											}
+										}
 									}
+									checked={values.aparcador}
 								/>
 							</Grid>
 							<Grid item>
