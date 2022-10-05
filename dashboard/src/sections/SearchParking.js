@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { collection, where, getDocs, query } from 'firebase/firestore'
 import { db } from '../firebaseConfig/firebase'
 import Button from '@mui/material/Button';
@@ -10,12 +9,11 @@ import withReactContent from 'sweetalert2-react-content' //npm i sweetalert2-rea
 
 const MySwal = withReactContent(Swal)
 
-const Search = () => {
+function SearchParking(props){
  const [ Calle, setCalle ] = useState('')
  const [ entre1, setEntre1 ] = useState('')
  const [ entre2, setEntre2 ] = useState('')
  const [direcciones, setDirecciones] = useState([])
- const navigate = useNavigate()
 
   const direccionesCollection = collection(db, "direcciones")
 
@@ -68,9 +66,6 @@ const Search = () => {
     }
   }; 
  
-  
-
-
   return (
     <div className='container'>
         <div className='row'>
@@ -115,4 +110,4 @@ const Search = () => {
   )
 }
 
-export default Search
+export default SearchParking
