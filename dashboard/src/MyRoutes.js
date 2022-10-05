@@ -18,7 +18,7 @@ function MyRoutes(props){
 			<Route path='/whereiam'>
 				<WhereIAm />
 			</Route>
-			<Route path='/thereareparking2'>
+			<Route path='/thereareparking'>
 				<ThereAreParking />
 			</Route>
 
