@@ -1,6 +1,6 @@
 import { Route, Switch } from "react-router-dom"
 import WhereIAm from './sections/WhereIAm.js'
-import ThereAreParking from './sections/ThereAreParking.js'
+import ThereAreParking from './sections/ThereAreParking2.js'
 import SearchParking from './sections/SearchParking.js'
 import Parking from './sections/Parking.js'
 import Login from './sections/Login.js'
@@ -18,7 +18,7 @@ function MyRoutes(props){
 			<Route path='/whereiam'>
 				<WhereIAm />
 			</Route>
-			<Route path='/thereareparking'>
+			<Route path='/thereareparking2'>
 				<ThereAreParking />
 			</Route>
 
