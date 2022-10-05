@@ -72,7 +72,7 @@ function WhereIAm(props){
 						history.push("/thereareparking")
 
 					}else{
-							setAlertMessage("Api no responde")
+							setAlertMessage("No se ingresaron todos los datos")
 						// .catch(err=>{
 						// 	setAlertMessage("Api no responde")
 						// })
