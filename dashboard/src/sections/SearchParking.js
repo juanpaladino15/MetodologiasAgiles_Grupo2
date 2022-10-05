@@ -107,7 +107,7 @@ const Search = () => {
                             className='form-control'
                         />                 
                     </div>                    
-                        <Button type="submit" variant="contained" >Search</Button>   
+                        <Button type="submit" variant="contained" color="success">Search</Button>   
                  </form>   
             </div>
         </div>
