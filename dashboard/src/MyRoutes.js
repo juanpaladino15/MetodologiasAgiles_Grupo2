@@ -1,7 +1,8 @@
 import { Route, Switch } from "react-router-dom"
 import WhereIAm from './sections/WhereIAm.js'
 import ThereAreParking from './sections/ThereAreParking2.js'
-import SearchParking from './sections/SearchParking.js'
+//import SearchParking from './sections/SearchParking.js'
+import SearchParking from './sections/SearchParking2.js'
 import Parking from './sections/Parking.js'
 import Login from './sections/Login.js'
 import NoPage from './NoPage.js'

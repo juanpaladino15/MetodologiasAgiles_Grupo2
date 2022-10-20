@@ -8,11 +8,14 @@ import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import config from '../config.js'
+import { useCookies } from 'react-cookie'
 
 
 function WhereIAm(props){
 	const [alertMessage,setAlertMessage] = useState(null)
 	let history = useHistory();
+
+	const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
 	return(
 		<Grid
@@ -69,6 +72,9 @@ function WhereIAm(props){
 						// 	} else
 						// 		setAlertMessage("Usuario invalido")
 						// })
+						setCookie("calle", values.calle, { path: "/" });
+						setCookie("entre1", values.calle1, { path: "/" });
+						setCookie("entre2", values.calle2, { path: "/" });
 						history.push("/thereareparking")
 
 					}else{

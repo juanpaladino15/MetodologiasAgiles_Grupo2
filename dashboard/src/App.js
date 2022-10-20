@@ -7,7 +7,7 @@ function App() {
 
   return (
 	<Router>
-		<MyRoutes />
+		<MyRoutes/>
 	</Router>
   )
 
