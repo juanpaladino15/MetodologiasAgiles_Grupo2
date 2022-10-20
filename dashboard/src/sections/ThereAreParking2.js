@@ -4,11 +4,13 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom"
-
+import { useCookies } from 'react-cookie'
 
 function ThereAreParking(props){
 	const {calle, entre1, entre2} = props
 	const [haylugar, sethaylugar] = useState(0)
+
+	const [cookies, setCookie, removeCookie] = useCookies(['calle','entre1','entre2']);
 
 	const url = ''
 
