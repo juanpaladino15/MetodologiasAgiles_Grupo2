@@ -31,7 +31,9 @@ function MyRoutes(props){
 			<Route path='/parking'>
 				<Parking/>
 			</Route>
-
+			<Route path='/calificar'>
+				<Calificar/>
+			</Route>
 			{/* La pagina no existe */}
 			<Route path="*">
 				<NoPage/>
