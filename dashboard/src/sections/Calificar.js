@@ -61,18 +61,17 @@ function Calificar(props){
 			justifyContent="center"
 			alignItems="center"
 		>
-		<Grid
-			item
-			sx={{
-				marginTop: "50vh"
-			}}
-		>
-		</Grid>
 		
-			<Paper sx={{
-				backgroundColor:"#eeeeee"
+			<Paper 
+				sx={{
+					backgroundColor:"#eeeeee",
+					marginTop: "30vh",
+					width: 500,
+					height: 187
 				}}
+				
 				elevantion={3}
+				
 			>
 				<Formik
 					initialValues={{
@@ -80,19 +79,48 @@ function Calificar(props){
 					}}
 					onSubmit={values=>{
 						// search(values.puntuacion)
+						console.log(values.puntuacion)
 					}}
 					render={({values,setFieldValue,handleChange})=>(
 						<Form>
-							<Grid container spacing={2}>
+							<Grid 
+								container 
+								spacing={2}
+								justifyContent="center"
+								alignItems="center"
+								sx={{
+									marginTop: "5vh"
+								}}
+							>
 								<Typography component="legend">Puntuacion para el aparcador:</Typography>
-									<Rating
- 										name="simple-controlled"
- 										value={values.puntuacion}
-  										onChange={(event, newValue) => {
-    									setValue(newValue);
+
+								<Rating
+ 									name="simple-controlled"
+ 									value={values.puntuacion}
+  									onChange={(event, value) => {
+    									setValue(value);
   									}}
 								/>
+
+								<Grid 
+									item
+									justifyContent="center"
+									alignItems="center"
+									sx={{
+										marginTop: "1vh",
+										marginRight: "4vw"
+									}}
+								>
+									<Button
+										variant='contained'
+										type="submit"
+									>
+										Enviar
+									</Button>
+								</Grid>
+								
 							</Grid>
+							
 						</Form>
 					)}
 				/>
