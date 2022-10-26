@@ -7,12 +7,12 @@ import { useHistory } from "react-router-dom"
 import { useCookies } from 'react-cookie'
 
 function ThereAreParking(props){
-	const {calle, entre1, entre2} = props
+	//const {calle, entre1, entre2} = props
 	const [haylugar, sethaylugar] = useState(0)
 
 	const [cookies, setCookie, removeCookie] = useCookies(['calle','entre1','entre2']);
 
-	const url = ''
+	const url = 'estoyEn/' + cookies.calle + '/' + cookies.entre1 + '/' + cookies.entre2
 
 	const changeLugar= async (cant)=>{
 		const requestOptions = {
@@ -20,7 +20,9 @@ function ThereAreParking(props){
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body:{}
+			body:{
+				cantidad: cant
+			}
 		}
 		try{
 	      const response = await fetch(url,requestOptions)
@@ -70,7 +72,7 @@ function ThereAreParking(props){
 							Me encuentro en:
 						</Typography>
 						<Typography>
-							{calle + " e /" + entre1 + " y " + entre2}
+							{cookies.calle + " e /" + cookies.entre1 + " y " + cookies.entre2}
 						</Typography>
 					</Grid>
 					<Grid
@@ -87,7 +89,7 @@ function ThereAreParking(props){
 							variant='contained'
 							size='large'
 							sx={{ width:150 }}
-							color={haylugar==0?'success':"primary"}
+							color={haylugar===0?'success':"primary"}
 							onClick={(e)=>{changeLugar(0)}}>
 							0
 						</Button>
@@ -97,7 +99,7 @@ function ThereAreParking(props){
 							variant='contained'
 							size='large'
 							sx={{ width:150 }}
-							color={haylugar==1?'success':"primary"}
+							color={haylugar===1?'success':"primary"}
 							onClick={(e)=>{changeLugar(1)}}>
 							1
 						</Button>
@@ -107,7 +109,7 @@ function ThereAreParking(props){
 							variant='contained'
 							size='large'
 							sx={{ width:150 }}
-							color={haylugar==2?'success':"primary"}
+							color={haylugar===2?'success':"primary"}
 							onClick={(e)=>{changeLugar(2)}}>
 							2
 						</Button>
@@ -117,7 +119,7 @@ function ThereAreParking(props){
 							variant='contained'
 							size='large'
 							sx={{ width:150 }}
-							color={haylugar==3?'success':"primary"}
+							color={haylugar===3?'success':"primary"}
 							onClick={(e)=>{changeLugar(3)}}>
 							3	
 						</Button>
@@ -127,7 +129,7 @@ function ThereAreParking(props){
 							variant='contained'
 							size='large'
 							sx={{ width:150 }}
-							color={haylugar==4?'success':"primary"}
+							color={haylugar===4?'success':"primary"}
 							onClick={(e)=>{changeLugar(4)}}>
 							4
 						</Button>
@@ -137,7 +139,7 @@ function ThereAreParking(props){
 							variant='contained'
 							size='large'
 							sx={{ width:150 }}
-							color={haylugar==5?'success':"primary"}
+							color={haylugar===5?'success':"primary"}
 							onClick={(e)=>{changeLugar(5)}}>
 							+4
 						</Button>
