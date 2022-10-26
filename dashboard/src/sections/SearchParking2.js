@@ -31,32 +31,36 @@ function ItemParking(props){
 }
 
 function SearchParking(props){
- const [ Calle, setCalle ] = useState('')
- const [ entre1, setEntre1 ] = useState('')
- const [ entre2, setEntre2 ] = useState('')
- const [direcciones, setDirecciones] = useState([])
+	const [ Calle, setCalle ] = useState('')
+	const [ entre1, setEntre1 ] = useState('')
+	const [ entre2, setEntre2 ] = useState('')
+	const [direcciones, setDirecciones] = useState([])
+	const [message, setMessage] = useState(null)
 
-  const direccionesCollection = collection(db, "direcciones")
+	const direccionesCollection = collection(db, "direcciones")
 
-  const search = async (values) => {
-    const q = query(
-      collection(db, "direcciones"),
-      where("Calle", "==", values.calle),
-      where("entre1", "==", values.entre1),
-      where("entre2", "==", values.entre2)
-    );
-    const querySnapshot = await getDocs(q);
-
-    if (!querySnapshot.empty) {
-		var items = new Array
-      querySnapshot.forEach(doc => {
-			items.push(<ItemParking
-				dir={doc.data().dir}
-				cant={doc.data().cantidad}
-			/>)
-		})
-		setDirecciones(items)
-    }
+	const search = async (values) => {
+		const requestOptions = {
+         method: 'GET',
+         headers: {
+            'Content-Type': 'application/json',
+         }
+      }
+      try{
+         const response = await fetch('aca',requestOptions)
+			const data = await response.json()
+			var items = new Array
+      	data.forEach(doc => {
+				items.push(<ItemParking
+					dir={doc.data().dir}
+					cant={doc.data().cantidad}
+				/>)
+			})
+			setDirecciones(items)
+		} catch(e){
+			setMessage("Fallo de la API")
+			console.log(e)
+		}
   }
  
   return (
@@ -130,9 +134,14 @@ function SearchParking(props){
 				<Grid>
 					{direcciones.length>0?
 						direcciones:
-						<Alert severity="error">
+						<Alert severity="info">
 							Sin datos. Intente otra dirección
 						</Alert>
+					}
+					{message!=null?
+						<Alert severity="error">
+							{message}
+						</Alert>:null
 					}
 				</Grid>
 			</Grid>
