@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from "react-router-dom"
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -11,23 +12,28 @@ import { collection, where, getDocs, query } from 'firebase/firestore'
 import { db } from '../firebaseConfig/firebase'
 
 import Swal from 'sweetalert2'  //npm i sweetalert2
-//import withReactContent from 'sweetalert2-react-content' //npm i sweetalert2-react-content
-
-
-//const MySwal = withReactContent(Swal)
 
 function ItemParking(props){
-	const {dir, cant} = props
+	const {calle, entre1, entre2, cant} = props
+
+	let history = useHistory();
+
 	return(
 		<Grid item container>
 			<Grid item xs={4}>
-				{dir}
+				{calle + " e/" + entre1 + " y " + entre2}
 			</Grid>
 			<Grid item xs={5}>
 				{cant}
 			</Grid>
 			<Grid item xs={3}>
-				<Button variant='contained'>
+				<Button
+					variant='contained'
+					onClick={
+						event =>
+						history.push("/calificar/" + calle + "/" + entre1 + "/" + entre2)
+					}
+				>
 					Calificar
 				</Button>
 			</Grid>
@@ -62,7 +68,9 @@ function SearchParking(props){
 			console.log("RESULT",result)
       	result.forEach(d => {
 				items.push(<ItemParking
-					dir={d.Calle + " e " + d.entre1 + "/" + d.entre2}
+					calle={d.Calle}
+					entre1={d.entre1}
+					entre2={d.entre2}
 					cant={d.estado}
 				/>)
 			})
