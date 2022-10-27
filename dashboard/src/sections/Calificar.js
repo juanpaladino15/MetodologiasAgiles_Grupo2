@@ -97,8 +97,8 @@ function Calificar(props){
 								<Rating
  									name="simple-controlled"
  									value={values.puntuacion}
-  									onChange={(event, value) => {
-    									setValue(value);
+  									onChange={(event) => {
+    									setFieldValue("puntuacion", event.target.value);
   									}}
 								/>
 
