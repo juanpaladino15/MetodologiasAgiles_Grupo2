@@ -19,6 +19,36 @@ function Login(props){
 
 	let history = useHistory();
 
+	const login = async (values)=>{
+		var url = "http://10.40.12.21:4000/api/usuarios/login" 
+		const requestOptions = {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json',
+         },
+			body:JSON.stringify({
+				email:values.username,
+				password:values.passwd
+			})
+      }
+
+		try {
+			const response = await fetch(url,requestOptions)
+			const result = await response.json()
+			console.log(result)
+			setCookie("userId", result.id, { path: "/" });
+			setCookie("userRol", result.rol, { path: "/" });
+			if(result.rol == 'trapito'){
+				history.push("/whereiam")
+			} else {
+				history.push("/searchparking")
+			}
+		} catch(e){
+			console.log(e)
+			setAlertMessage("Error para autenticar")
+		}
+	}
+
 	return(
 		<Grid
 			container
@@ -53,6 +83,8 @@ function Login(props){
 					aparcador:false
 				}}
 				onSubmit={(values)=>{
+					login(values)
+				/*
 					if(!values.aparcador){
 						if(values.username === 'conductor@test.com.ar'
 						&& values.passwd === 'AgilesConductor'){
@@ -68,6 +100,7 @@ function Login(props){
 						} else
 							setAlertMessage("Usuario invalido")
 					}
+				*/
 				}}
 
 			render={({values,setFieldValue,handleChange}) => (
@@ -99,29 +132,6 @@ function Login(props){
 							justifyContent="center"
 							direction='row'
 						>
-							<Grid item>
-								Soy conductor
-							</Grid>
-							<Grid item>
-								<Switch
-									onChange={
-										(e) => {
-											setFieldValue("aparcador",!values.aparcador)
-											if(!values.aparcador){
-												setFieldValue("username","trapito@test.com.ar")
-												setFieldValue("passwd","AgilesTrapito")
-											} else {
-												setFieldValue("username","conductor@test.com.ar")
-												setFieldValue("passwd","AgilesConductor")
-											}
-										}
-									}
-									checked={values.aparcador}
-								/>
-							</Grid>
-							<Grid item>
-								Soy aparcador
-							</Grid>
 						</Grid>
 						<Grid item>
 							<Button

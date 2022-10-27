@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import Alert from '@mui/material/Alert';
 import Rating from '@mui/material/Rating';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -9,51 +10,43 @@ import { useHistory } from "react-router-dom"
 import { useCookies } from 'react-cookie'
 
 function Calificar(props){
-	// const {calle, entre1, entre2} = props
-	// const [haylugar, sethaylugar] = useState(0)
+	const {calle, entre1, entre2} = props
 	const [value, setValue] = React.useState(2)
-	// const [cookies, setCookie, removeCookie] = useCookies(['calle','entre1','entre2']);
+	const [message,setMessage] = useState("")
 
-	// const url = ''
+	console.log("CALLESSSS:",calle,entre1,entre2)
 
-	// const changeLugar= async (cant)=>{
-	// 	const requestOptions = {
-	// 		method: 'POST',
-	// 		headers: {
-	// 			'Content-Type': 'application/json',
-	// 		},
-	// 		body:{}
-	// 	}
-	// 	try{
-	//       const response = await fetch(url,requestOptions)
-	// 		const data = await response.json()
-	// 		if(response.status == 200){
-	// 			sethaylugar(cant)
-	// 		}
-	// 	} catch(e){
-	// 		sethaylugar(0)
-	// 	}
+	const enviarCalificacion = values =>{
+		var url = "http://10.40.12.21:4000/api/direcciones/calificar"
 
-	// }
-	// useEffect(()=>{
-	// 	async function returnHayLugar(){
-	// 		const requestOptions = {
-	// 			method: 'GET',
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 			}
-	// 		}
-	// 		try{
-	// 	      const response = await fetch(url,requestOptions)
-	// 			const data = await response.json()
-	// 			if(response.status == 200){
-	// 				sethaylugar(data.cantidad)
-	// 			}
-	// 		} catch(e){
-	// 			sethaylugar(0)
-	// 		}
-	// 	}
-	// },[])
+		const requestOptions = {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json',
+         },
+			body:{
+				calle: calle,
+				entre1: entre1,
+				entre2: entre2,
+				calificacion: values.puntuacion
+			}
+      }
+
+		fetch(url,requestOptions)
+		.then(ok=>{
+			if (ok.status != 200){
+				setMessage("Error al calificar")
+			} else {
+				setMessage("")
+			}
+			console.log(ok)
+			console.log("Datos enviados")
+		})
+		.catch(err=>{
+			console.log("Entro por el error")
+			console.log(err)
+		})
+	}
 
 	return(
 		<Grid
@@ -61,7 +54,6 @@ function Calificar(props){
 			justifyContent="center"
 			alignItems="center"
 		>
-		
 			<Paper 
 				sx={{
 					backgroundColor:"#eeeeee",
@@ -78,8 +70,8 @@ function Calificar(props){
 						puntuacion: 0
 					}}
 					onSubmit={values=>{
-						// search(values.puntuacion)
 						console.log(values.puntuacion)
+						enviarCalificacion(values)
 					}}
 					render={({values,setFieldValue,handleChange})=>(
 						<Form>
@@ -117,6 +109,11 @@ function Calificar(props){
 									>
 										Enviar
 									</Button>
+								</Grid>
+								<Grid>
+									{
+									message!=""?<Alert severity="error">{message}</Alert>:null
+									}
 								</Grid>
 								
 							</Grid>

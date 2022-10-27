@@ -5,17 +5,13 @@ const {db} = require('../../firebase');
 const router = Router();
 
 router.post('/', async (req, res) => {
+	/* Agerga un usuario */
     console.log(req.body);
     const {nombre, apellido, email, password, rol} = req.body;
-    const user = await db.collection('usuarios').add({
-        nombre,
-        apellido,
-        email,
-        password,
-        rol
-    });
+    const user = await db.collection('usuarios').add(req.body)
     res.json({message: 'Usuario creado'});
 });
+
 
 router.post('/login', async (req, res) => {
     console.log(req.body);
@@ -25,10 +21,16 @@ router.post('/login', async (req, res) => {
         res.json({message: 'Usuario no encontrado'});
     }else{
        // res.json({message: 'Usuario encontrado'});
+			res.json({
+				id:user.docs[0].id,
+				rol:user.docs[0].data().rol,
+			})
+/*
         res.json(user.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
         })))        
+*/
     }
     
 });
@@ -56,6 +58,24 @@ router.post('/singup', async (req, res) => {
     }); 
 
 });
+
+router.get('/', async (req, res) => {
+	const querySnapshot = await db.collection("usuarios").get();
+
+    const usuarios = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+    }))
+//    const usuario = await db.collection('usuarios').doc().get()
+    res.json(usuarios);
+});
+
+
+router.get('/:id/scoring', async (req, res) => {
+    const usuario = await db.collection('usuarios').doc(req.params.id).get()
+    res.json(usuario.data().calificaciones);
+});
+
 
 router.get('/:id', async (req, res) => {
     const usuario = await db.collection('usuarios').doc(req.params.id).get()

@@ -32,9 +32,17 @@ function MyRoutes(props){
 			<Route path='/parking'>
 				<Parking/>
 			</Route>
-			<Route path='/calificar'>
-				<Calificar/>
-			</Route>
+
+			<Route path="/calificar/:calle/:entre1/:entre2"
+            render={(props) => (
+               <Calificar
+						calle={props.match.params.calle}
+						entre1={props.match.params.entre1}
+						entre2={props.match.params.entre2}
+               />
+            )}
+         />
+
 			{/* La pagina no existe */}
 			<Route path="*">
 				<NoPage/>
