@@ -38,33 +38,31 @@ router.get("/:id", async (req, res) => {
 //recupera una direccion por poximidad
 router.get("/:calle/:entre1/:entre2" , async (req, res) => {
     console.log(req.body);
-    const { calle } = req.params;   
-    var callep = parseInt(calle);
-    var callei = callep--;
-    var callef = callep++; 
-    const { entre1 } = req.params;
-    var entre1p = parseInt(entre1);
-    var entre1i = entre1p--;
-    var entre1f = entre1p++; 
-    const { entre2 } = req.params;
-    var entre2p = parseInt(entre2);
-    var entre2i = entre2p--;
-    var entre2f = entre2p++;
-    
+
     const querySnapshot = await db.collection('direcciones')
-    .where("Calle", "in", [callei, callep, callef])	
-    .where('entre1', '==', entre1)    
+   // .where("Calle", ">=", req.params.calle - 1)	
+  //  .where("Calle", "<=", req.params.calle + 1)	
+   // .where("entre1", "==", req.params.entre1)    
+   // .where("entre2", "==", req.params.entre2)    
     .get();
     
     
     const direcciones = querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
-    }));
+		  entre1:parseInt(doc.data().entre1),
+		  entre2:parseInt(doc.data().entre2),
+		  Calle:parseInt(doc.data().Calle),
+		  estado:doc.data().estado
+    }))
 
-    //console.log(direcciones);
+    console.log(direcciones);
 
-    res.send(direcciones);
+	console.log("Buscando calles:",parseInt(req.params.calle) - 1,parseInt(req.params.calle) + 1)
+    res.send(direcciones.filter(d=>
+		d.Calle >= parseInt(req.params.calle) - 1 &&
+		d.Calle <= parseInt(req.params.calle) + 1 &&
+		d.entre1 >= parseInt(req.params.entre1) - 1 &&
+		d.entre1 <= parseInt(req.params.entre2) + 1));
     //res.json(direcciones); //retorna json
     //res.render('direcciones', {direcciones}) //renderiza con handelbar
     
