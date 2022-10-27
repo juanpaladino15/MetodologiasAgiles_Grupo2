@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors')
 const morgan = require('morgan');
 const path = require('path');
 const exphbs = require("express-handlebars");
@@ -16,6 +17,7 @@ app.engine(".hbs", exphbs.create({
 app.set('view engine', '.hbs');
 
 app.use(morgan('dev'))
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
