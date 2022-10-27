@@ -36,7 +36,7 @@
     <div class="card text-white bg-primary mb-3">
         <div class="card-header">Direcciones</div>
         <div class="card-body">
-            <form action="{{#unless direccion.id}}/new-direccion{{else}}/update-direccion/{{direccion.id}}{{/unless}}"
+            <form action="{{#unless direccion.id}}/api/direcciones/new-direccion{{else}}/api/direcciones/update-direccion/{{direccion.id}}{{/unless}}"
                 method="POST">
 
                 <div class="row">

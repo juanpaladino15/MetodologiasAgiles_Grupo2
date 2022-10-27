@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
     console.log(direcciones);
 
     
-    res.json(direcciones); //retorna json
-    //res.render('direcciones', {direcciones}) //renderiza con handelbar
+   // res.json(direcciones); //retorna json
+    res.render('direcciones', {direcciones}) //renderiza con handelbar
 });
 
 //recupera una direccion por id
@@ -40,22 +40,27 @@ router.get("/:calle/:entre1/:entre2" , async (req, res) => {
     console.log(req.body);
     const { calle } = req.params;   
     var callep = parseInt(calle);
-    var callei = callep--;
-    var callef = callep++; 
+    var callei = callep-2;
+    var callef = callep+2;; 
     const { entre1 } = req.params;
     var entre1p = parseInt(entre1);
-    var entre1i = entre1p--;
-    var entre1f = entre1p++; 
+    var entre1i = entre1p-1;
+    var entre1f = entre1p+1; 
     const { entre2 } = req.params;
     var entre2p = parseInt(entre2);
-    var entre2i = entre2p--;
-    var entre2f = entre2p++;
+    var entre2i = entre2p-1;
+    var entre2f = entre2p+1;
     
-    const querySnapshot = await db.collection('direcciones')
-    .where("Calle", "in", [callei, callep, callef])	
-    .where('entre1', '==', entre1)    
+    console.log(callei, callep, callef, entre1i, entre1p, entre1f, entre2i, entre2p, entre2f);
+   // const querySnapshot = await db.collection('direcciones')
+   // .orderBy('Calle').startAt(callei).endAt(callef)    
+   // .get();
+    
+    const querySnapshot = await db.collection('direcciones', ref => ref.where('entre1', '>=', entre1i)
+    .where('entre1', '<=', entre1f).where('entre2', '>=', entre2i).where('entre2', '<=', entre2f))    
+    .orderBy('Calle').startAt(callei).endAt(callef)
+    .limitToLast(4)
     .get();
-    
     
     const direcciones = querySnapshot.docs.map(doc => ({
         id: doc.id,
@@ -64,9 +69,9 @@ router.get("/:calle/:entre1/:entre2" , async (req, res) => {
 
     //console.log(direcciones);
 
-    res.send(direcciones);
+    //res.send(direcciones);
     //res.json(direcciones); //retorna json
-    //res.render('direcciones', {direcciones}) //renderiza con handelbar
+    res.render('direcciones', {direcciones}) //renderiza con handelbar
     
 });
 
