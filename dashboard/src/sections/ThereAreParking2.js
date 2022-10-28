@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import Rating from '@mui/material/Rating';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import React, { useState, useEffect } from 'react';
@@ -9,6 +10,8 @@ import { useCookies } from 'react-cookie'
 function ThereAreParking(props){
 	//const {calle, entre1, entre2} = props
 	const [haylugar, sethaylugar] = useState(0)
+
+	const [rate, setrate] = useState(0)
 
 	const [cookies, setCookie, removeCookie] = useCookies(['calle','entre1','entre2']);
 
@@ -25,7 +28,7 @@ function ThereAreParking(props){
 			}
 		}
 		try{
-	      const response = await fetch(url,requestOptions)
+	    const response = await fetch(url,requestOptions)
 			const data = await response.json()
 			if(response.status == 200){
 				sethaylugar(cant)
@@ -35,6 +38,27 @@ function ThereAreParking(props){
 		}
 
 	}
+
+	const getRate = async (cant)=>{
+		let url = 'http://' + config.api.host + ''
+		const requestOptions = {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		}
+		try{
+	    const response = await fetch(url,requestOptions)
+			const data = await response.json()
+			if(response.status == 200){
+				sethaylugar(cant)
+			}
+		} catch(e){
+			sethaylugar(0)
+		}
+
+	}
+
 	useEffect(()=>{
 		async function returnHayLugar(){
 			const requestOptions = {
@@ -143,6 +167,9 @@ function ThereAreParking(props){
 							onClick={(e)=>{changeLugar(5)}}>
 							+4
 						</Button>
+						</Grid>
+						<Grid>
+						<Rating name="read-only" value={rate} readOnly/>
 						</Grid>
 					</Grid>
 				</Grid>
