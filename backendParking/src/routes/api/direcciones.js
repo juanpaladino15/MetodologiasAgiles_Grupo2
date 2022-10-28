@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
     console.log(direcciones);
 
     
-   // res.json(direcciones); //retorna json
-    res.render('direcciones', {direcciones}) //renderiza con handelbar
+   res.json(direcciones); //retorna json
+    //res.render('direcciones', {direcciones}) //renderiza con handelbar
 });
 
 //recupera una direccion por id
@@ -28,9 +28,9 @@ router.get("/:id", async (req, res) => {
     const direccion = await db.collection('direcciones').doc(req.params.id).get()
 
     //randeriza con handelbar
-   // res.render("direcciones", { direccion: { id: direccion.id, ...direccion.data() }});
+    //res.render("direcciones", { direccion: { id: direccion.id, ...direccion.data() }});
     
-    res.json(direccion.data());
+   res.json(direccion.data());
 
    
 });
@@ -72,7 +72,8 @@ router.get("/:calle/:entre1/:entre2" , async (req, res) => {
 		  entre1:parseInt(doc.data().entre1),
 		  entre2:parseInt(doc.data().entre2),
 		  Calle:parseInt(doc.data().Calle),
-		  estado:doc.data().estado
+		  estado:doc.data().estado,
+          aparcador:doc.data().aparcador
     }))
 
     console.log(direcciones);
@@ -81,6 +82,9 @@ router.get("/:calle/:entre1/:entre2" , async (req, res) => {
     //res.send(direcciones);
 
 	console.log("Buscando calles:",parseInt(req.params.calle) - 1,parseInt(req.params.calle) + 1)
+
+    //INFO: En direcciones aparace, si lo tiene el id de aparcador bajo el campo aparcador
+    // si no aparcador es undefined
     res.send(direcciones.filter(d=>
 		d.Calle >= parseInt(req.params.calle) - 1 &&
 		d.Calle <= parseInt(req.params.calle) + 1 &&
@@ -116,6 +120,8 @@ router.post('/new-direccion', async (req, res ) => {
     //res.redirect('/') //redirecciona a localhost:3000 
 })
 
+
+
 //devuelve una direccion para su edicion 
 router.get('/edit-direccion/:id', async (req, res) => {
     const doc = await db.collection('direcciones').doc(req.params.id).get()
@@ -123,7 +129,7 @@ router.get('/edit-direccion/:id', async (req, res) => {
     // renderiza la direccion de id igual al parametro en vista handelbar
     //res.render("direcciones", { direccion: { id: doc.id, ...doc.data() }});
 
-    res.json(doc.data()) //retorna un json con una tupla direccion 
+   res.json(doc.data()) //retorna un json con una tupla direccion 
 })
 
 //borra un direccion eliminandola de la bd
@@ -159,6 +165,92 @@ router.post("/update-direccion/:id", async (req, res) => {
     //---------------------------------------------------------    
 
    // res.redirect("/"); //redirecciona a localhost:3000
+
+})
+
+//carga una direccion nueva con id de trapito
+router.post('/new-direccion2', async (req, res ) => {
+    //const { Calle, entre1, entre2, estado } = req.body
+    
+     //------------carga direccion-----------
+    console.log(req.body);
+    const direccion = await db.collection("direcciones").add({
+        Calle: parseInt(req.body.Calle),
+        entre1: parseInt(req.body.entre1),
+        entre2: parseInt(req.body.entre2),
+        estado: req.body.estado,
+        aparcador: req.body.aparcador
+    });
+    //------------retorna message-----------------------------------
+    if(res.statusCode == 200){
+        res.json({status: res.statusCode, message: "Direccion cargada"})
+    }
+    if(res.statusCode != 200){
+        res.json({status: res.statusCode, message: "Error al cargar direccion"})
+    } 
+    //---------------------------------------------------------  
+    
+    //res.redirect('/') //redirecciona a localhost:4000 
+})
+
+//consulta una direcccion por calle, entre1 y entre2 y actualiza campo aparcador y estado
+router.post('/update-direccion2/:calle/:entre1/:entre2/aparcador/estado', async (req, res ) => {
+  
+    //------------consulta direccion-----------
+    const direcciones = await db.collection("direcciones")
+    .where("Calle", "==", parseInt(req.params.calle))
+    .where("entre1", "==", parseInt(req.params.entre1))
+    .where("entre2", "==", parseInt(req.params.entre2)).get();
+    
+    const id = direcciones.docs[0].id;
+
+    console.log(id);
+
+    //------------actualiza direccion-----------
+    const direccion = await db.collection("direcciones").doc(id).update({
+        aparcador: req.body.aparcador,
+        estado: req.body.estado
+    });
+    //------------retorna message-----------------------------------
+    if(res.statusCode == 200){
+        res.json({status: res.statusCode, message: "Direccion actualizada"})
+    }
+    if(res.statusCode != 200){
+        res.json({status: res.statusCode, message: "Error al actualizar direccion"})
+    }
+    //---------------------------------------------------------
+
+})
+ 
+//calificar Dado calle, entre1, entre2 y un score (del 1 al 5) 
+//se busca en la coleccion de calles por los datos 
+//calle, entre1 y entre2. 
+//Se obtiene el id del trapito y luego se agrega el score en el 
+//array del trapito.
+
+router.post('/calificar/:calle/:entre1/:entre2/score', async (req, res ) => {
+
+    //------------consulta direccion-----------
+    const direcciones = await db.collection("direcciones")
+    .where("Calle", "==", parseInt(req.params.calle))
+    .where("entre1", "==", parseInt(req.params.entre1))
+    .where("entre2", "==", parseInt(req.params.entre2)).get();
+
+    const id = direcciones.docs[0].data().aparcador;
+
+    //------------actualiza score-----------
+    const aparacador = await db.collection("usuarios").doc(ref => 
+        ref.where("id", "==", id).where("rol", "==", "trapito"))
+        .update({
+            calificaciones: admin.firestore.FieldValue.arrayUnion(parseInt(req.params.score))   
+        });
+    if(res.statusCode == 200){
+        res.json({status: res.statusCode, message: "Score actualizado"})
+    }
+    if(res.statusCode != 200){
+        res.json({status: res.statusCode, message: "Error al actualizar score"})
+    }
+    //---------------------------------------------------------
 
 })
 

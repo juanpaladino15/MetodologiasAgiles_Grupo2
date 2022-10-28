@@ -36,7 +36,7 @@
     <div class="card text-white bg-primary mb-3">
         <div class="card-header">Direcciones</div>
         <div class="card-body">
-            <form action="{{#unless direccion.id}}/api/direcciones/new-direccion{{else}}/api/direcciones/update-direccion/{{direccion.id}}{{/unless}}"
+            <form action="{{#unless direccion.id}}/api/direcciones/new-direccion2{{else}}/api/direcciones/update-direccion/{{direccion.id}}{{/unless}}"
                 method="POST">
 
                 <div class="row">
@@ -55,6 +55,11 @@
                     <div>
                         <label for="entre2">y calle:</label>
                         <input type="number" name="entre2" placeholder="entre2" id="entre2" value="{{direccion.entre2}}"
+                            class="form-control mb-2">
+                    </div>
+                    <div>
+                        <label for="aparcador">aparcador</label>
+                        <input type="text" name="aparcador" placeholder="aparcador" id="aparcador" value="{{direccion.aparcador}}"
                             class="form-control mb-2">
                     </div>
                 </div>
@@ -100,7 +105,7 @@
 
                 <div class="row">
                     {{#if direcciones.id}}
-                    <button class="btn btn-primary btn-block">Actualizar</button>
+                    <button class="btn btn-primary">Actualizar</button>
                     <a href="/" class="btn btn-secondary">Cancelar</a>
                     {{else}}
                     <button class="btn btn-success btn-block">Agregar</button>
@@ -132,6 +137,7 @@
                 <th scope="col">Entre calle</th>
                 <th scope="col">y calle </th>
                 <th scope="col">Estado</th>
+                <th scope="col">Aparcador</th>
                 <th scope="col">Acciones</th>
             </tr>
         </thead>
@@ -143,9 +149,10 @@
                 <td>{{entre1}} </td>
                 <td>{{entre2}}</td>
                 <td>{{estado}}</td>
+                <td>{{aparcador}}</td>
                 <td>
-                    <a href="/delete-direccion/{{id}}">Delete</a>
-                    <a href="/edit-direccion/{{id}}">Edit</a>
+                    <a href="/api/direcciones/delete-direccion/{{id}}">Delete</a>
+                    <a href="/api/direcciones/edit-direccion/{{id}}">Edit</a>
                 </td>
             </tr>
             {{/each}}
