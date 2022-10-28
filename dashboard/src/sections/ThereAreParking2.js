@@ -10,32 +10,37 @@ function ThereAreParking(props){
 	//const {calle, entre1, entre2} = props
 	const [haylugar, sethaylugar] = useState(0)
 
-	const [cookies, setCookie, removeCookie] = useCookies(['calle','entre1','entre2']);
+	const [cookies, setCookie, removeCookie] = useCookies(['calle','entre1','entre2','userId']);
 
-	const url = 'estoyEn/' + cookies.calle + '/' + cookies.entre1 + '/' + cookies.entre2
 
 	const changeLugar= async (cant)=>{
+		console.log("Entro")
+		const url='http://10.40.12.21:4000/api/direcciones/' + cookies.calle + '/' + cookies.entre1 + '/' + cookies.entre2
 		const requestOptions = {
-			method: 'POST',
+			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body:{
-				cantidad: cant
-			}
+			body:JSON.stringify({
+				estado: cant,
+				aparcador: cookies.userId
+			})
 		}
 		try{
+			console.log("ENTRO")
 	      const response = await fetch(url,requestOptions)
 			const data = await response.json()
 			if(response.status == 200){
 				sethaylugar(cant)
 			}
 		} catch(e){
+			console.log(e)
 			sethaylugar(0)
 		}
 
 	}
 	useEffect(()=>{
+		const url = 'estoyEn/' + cookies.calle + '/' + cookies.entre1 + '/' + cookies.entre2
 		async function returnHayLugar(){
 			const requestOptions = {
 				method: 'GET',
