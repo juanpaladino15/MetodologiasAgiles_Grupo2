@@ -8,19 +8,20 @@ import { Formik, Form } from 'formik';
 import React, { useState, useEffect, setValue } from 'react';
 import { useHistory } from "react-router-dom"
 import { useCookies } from 'react-cookie'
+import config from '../config';
 
 function Calificar(props){
 	const {calle, entre1, entre2} = props
 	const [value, setValue] = React.useState(2)
 	const [message,setMessage] = useState("")
 
-	console.log("CALLESSSS:",calle,entre1,entre2)
+	// console.log("CALLESSSS:",calle,entre1,entre2)
 
 	const enviarCalificacion = values =>{
-		var url = "http://10.40.12.21:4000/api/direcciones/calificar"
+		var url = "http://"+ config.api.host +":4000/api/direcciones/calificar/:calle/:entre1/:entre2/:score"
 
 		const requestOptions = {
-         method: 'POST',
+         method: 'GET',
          headers: {
             'Content-Type': 'application/json',
          },
