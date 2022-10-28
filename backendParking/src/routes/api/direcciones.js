@@ -193,7 +193,7 @@ router.post('/new-direccion2', async (req, res ) => {
     //res.redirect('/') //redirecciona a localhost:4000 
 })
 
-//consulta una direcccion por calle, entre1 y entre2 y actualiza campo aparcador y estado
+//Update esta de una direcccion por calle, entre1 y entre2 y actualiza campo aparcador y estado
 router.get('/update-direccion2/:calle/:entre1/:entre2/:aparcador/:estado', async (req, res ) => {
   
     //------------consulta direccion-----------
@@ -217,11 +217,11 @@ router.get('/update-direccion2/:calle/:entre1/:entre2/:aparcador/:estado', async
                 aparcador: req.params.aparcador,
                 estado: req.params.estado
             }).then(() => {
-                console.log("Document successfully updated!");
+                console.log("Documento actualizado en campo estado y aparcador!");
                 res.json({status: res.statusCode, message: "Document successfully updated!"})
             }).catch((error) => {
                 // The document probably doesn't exist.
-                console.error("Error updating document: ", error);
+                console.error("Error actualizando direcciones campo estado y aparcador : ", error);
                 res.json({status: res.statusCode, message: "Error updating document: ", error})
             });
         });
@@ -236,29 +236,38 @@ router.get('/update-direccion2/:calle/:entre1/:entre2/:aparcador/:estado', async
 //Se obtiene el id del trapito y luego se agrega el score en el 
 //array del trapito.
 
-router.post('/calificar/:calle/:entre1/:entre2/score', async (req, res ) => {
+router.get('/calificar/:calle/:entre1/:entre2/:score', async (req, res ) => {
 
     //------------consulta direccion-----------
-    const direcciones = await db.collection("direcciones")
-    .where("Calle", "==", parseInt(req.params.calle))
-    .where("entre1", "==", parseInt(req.params.entre1))
-    .where("entre2", "==", parseInt(req.params.entre2)).get();
+    const querySnapshot = await db.collection('direcciones', ref => ref.where('Calle', '==', parseInt(req.params.calle)))
+    .where('entre1', '==', parseInt(req.params.entre1))
+    .where('entre2', '==', parseInt(req.params.entre2)).get();
+    
+   
+    //console.log(querySnapshot); 
 
-    const id = direcciones.docs[0].data().aparcador;
-
-    //------------actualiza score-----------
-    const aparacador = await db.collection("usuarios").doc(ref => 
-        ref.where("id", "==", id).where("rol", "==", "trapito"))
-        .update({
-            calificaciones: admin.firestore.FieldValue.arrayUnion(parseInt(req.params.score))   
+    if (querySnapshot.empty) {
+        console.log('No matching documents.');
+        res.json({status: res.statusCode, message: "No matching documents."})
+        //return;
+      }
+      else {
+        querySnapshot.forEach(doc => {
+            console.log(doc.id, '=>', doc.data().aparcador); 
+            const trapito = db.collection("usuarios").doc(doc.data().aparcador);
+            trapito.update({
+                score: req.params.score
+            }).then(() => { 
+                console.log("Documento actualizado con score a aparcador");
+                res.json({status: res.statusCode, message: "Document successfully updated!"})
+            }).catch((error) => {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+                res.json({status: res.statusCode, message: "Error actualizando doc score aparcador ", error})
+            });
         });
-    if(res.statusCode == 200){
-        res.json({status: res.statusCode, message: "Score actualizado"})
-    }
-    if(res.statusCode != 200){
-        res.json({status: res.statusCode, message: "Error al actualizar score"})
-    }
-    //---------------------------------------------------------
+        }   
+
 
 })
 
