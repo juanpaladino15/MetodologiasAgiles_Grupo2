@@ -143,7 +143,46 @@ router.post("/update-direccion/:id", async (req, res) => {
 
 })
 
+//calificar Dado calle, entre1, entre2 y un score (del 1 al 5) 
+//se busca en la coleccion de calles por los datos 
+//calle, entre1 y entre2. 
+//Se obtiene el id del trapito y luego se agrega el score en el 
+//array del trapito.
 
+router.get('/calificar/:calle/:entre1/:entre2/:score', async (req, res ) => {
+
+    //------------consulta direccion-----------
+    const querySnapshot = await db.collection('direcciones', ref => ref.where('Calle', '==', parseInt(req.params.calle)))
+    .where('entre1', '==', parseInt(req.params.entre1))
+    .where('entre2', '==', parseInt(req.params.entre2)).get();
+    
+   
+    //console.log(querySnapshot); 
+
+    if (querySnapshot.empty) {
+        console.log('No matching documents.');
+        res.json({status: res.statusCode, message: "No matching documents."})
+        //return;
+      }
+      else {
+        querySnapshot.forEach(doc => {
+            console.log(doc.id, '=>', doc.data().aparcador); 
+            const trapito = db.collection("usuarios").doc(doc.data().aparcador);
+            trapito.update({
+                score: req.params.score
+            }).then(() => { 
+                console.log("Documento actualizado con score a aparcador");
+                res.json({status: res.statusCode, message: "Document successfully updated!"})
+            }).catch((error) => {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+                res.json({status: res.statusCode, message: "Error actualizando doc score aparcador ", error})
+            });
+        });
+        }   
+
+
+})
 
 
 module.exports = router;

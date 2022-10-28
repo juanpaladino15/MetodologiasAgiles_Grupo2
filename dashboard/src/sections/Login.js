@@ -9,7 +9,7 @@ import Alert from '@mui/material/Alert';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 import { useCookies } from "react-cookie";
-//import config from '../config.js'
+import config from '../config.js'
 
 function Login(props){
 
@@ -20,7 +20,7 @@ function Login(props){
 	let history = useHistory();
 
 	const login = async (values)=>{
-		var url = "http://10.40.12.21:4000/api/usuarios/login" 
+		var url = "http://"+ config.api.host +":4000/api/usuarios/login" 
 		const requestOptions = {
          method: 'POST',
          headers: {
