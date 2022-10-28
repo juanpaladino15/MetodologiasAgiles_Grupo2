@@ -194,33 +194,41 @@ router.post('/new-direccion2', async (req, res ) => {
 })
 
 //consulta una direcccion por calle, entre1 y entre2 y actualiza campo aparcador y estado
-router.post('/update-direccion2/:calle/:entre1/:entre2/aparcador/estado', async (req, res ) => {
+router.get('/update-direccion2/:calle/:entre1/:entre2/:aparcador/:estado', async (req, res ) => {
   
     //------------consulta direccion-----------
-    const direcciones = await db.collection("direcciones")
-    .where("Calle", "==", parseInt(req.params.calle))
-    .where("entre1", "==", parseInt(req.params.entre1))
-    .where("entre2", "==", parseInt(req.params.entre2)).get();
+    const querySnapshot = await db.collection('direcciones', ref => ref.where('Calle', '==', parseInt(req.params.calle)))
+    .where('entre1', '==', parseInt(req.params.entre1))
+    .where('entre2', '==', parseInt(req.params.entre2)).get();
     
-    const id = direcciones.docs[0].id;
+   
+    //console.log(querySnapshot); 
 
-    console.log(id);
-
-    //------------actualiza direccion-----------
-    const direccion = await db.collection("direcciones").doc(id).update({
-        aparcador: req.body.aparcador,
-        estado: req.body.estado
-    });
-    //------------retorna message-----------------------------------
-    if(res.statusCode == 200){
-        res.json({status: res.statusCode, message: "Direccion actualizada"})
-    }
-    if(res.statusCode != 200){
-        res.json({status: res.statusCode, message: "Error al actualizar direccion"})
-    }
-    //---------------------------------------------------------
+    if (querySnapshot.empty) {
+        console.log('No matching documents.');
+        res.json({status: res.statusCode, message: "No matching documents."})
+        //return;
+      }
+      else {
+        querySnapshot.forEach(doc => {
+            console.log(doc.id, '=>', doc.data()); 
+            const direccion = db.collection("direcciones").doc(doc.id);
+            direccion.update({ 
+                aparcador: req.params.aparcador,
+                estado: req.params.estado
+            }).then(() => {
+                console.log("Document successfully updated!");
+                res.json({status: res.statusCode, message: "Document successfully updated!"})
+            }).catch((error) => {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+                res.json({status: res.statusCode, message: "Error updating document: ", error})
+            });
+        });
+        }   
 
 })
+
  
 //calificar Dado calle, entre1, entre2 y un score (del 1 al 5) 
 //se busca en la coleccion de calles por los datos 
