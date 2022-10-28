@@ -14,6 +14,9 @@ function Calificar(props){
 	const {calle, entre1, entre2} = props
 	const [value, setValue] = React.useState(2)
 	const [message,setMessage] = useState("")
+	const [calificado,setCalificado] = useState(false)
+
+	let history = useHistory();
 
 	// console.log("CALLESSSS:",calle,entre1,entre2)
 
@@ -69,12 +72,14 @@ function Calificar(props){
 					onSubmit={values=>{
 						console.log(values.puntuacion)
 						enviarCalificacion(values)
+						setCalificado(true)
 					}}
 					render={({values,setFieldValue,handleChange})=>(
 						<Form>
 							<Grid 
 								container 
 								spacing={2}
+								direction='column'
 								justifyContent="center"
 								alignItems="center"
 								sx={{
@@ -100,12 +105,25 @@ function Calificar(props){
 										marginRight: "4vw"
 									}}
 								>
-									<Button
-										variant='contained'
-										type="submit"
-									>
-										Enviar
-									</Button>
+									{!calificado?
+										<Button
+											variant='contained'
+											type="submit"
+										>
+											Enviar
+										</Button>
+										:
+										<Button
+											variant='contained'
+											onClick={()=>{
+												history.push("/searchparking")
+												}
+											}
+										>
+											Gracias!!!	
+										</Button>
+									}
+
 								</Grid>
 								<Grid>
 									{
