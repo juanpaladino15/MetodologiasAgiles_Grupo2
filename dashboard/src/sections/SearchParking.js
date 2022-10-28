@@ -10,10 +10,10 @@ import withReactContent from 'sweetalert2-react-content' //npm i sweetalert2-rea
 const MySwal = withReactContent(Swal)
 
 function SearchParking(props){
- const [ Calle, setCalle ] = useState('')
- const [ entre1, setEntre1 ] = useState('')
- const [ entre2, setEntre2 ] = useState('')
- const [direcciones, setDirecciones] = useState([])
+const [ Calle, setCalle ] = useState('')
+const [ entre1, setEntre1 ] = useState('')
+const [ entre2, setEntre2 ] = useState('')
+const [direcciones, setDirecciones] = useState([])
 
   const direccionesCollection = collection(db, "direcciones")
 
@@ -65,7 +65,7 @@ function SearchParking(props){
       })
     }
   }; 
- 
+
   return (
     <div className='container'>
         <div className='row'>
@@ -74,7 +74,7 @@ function SearchParking(props){
                 <h5>Test: 12 e/56 y 57</h5>
                 <h5>Test: 7 e/45 y 46</h5>
                 <h5>Test: Cualquier otra</h5>
-                 <form onSubmit={search}>
+                <form onSubmit={search}>
                     <div className='mb-3'>
                         <label className='form-label'>Calle</label>
                         <input
@@ -103,7 +103,7 @@ function SearchParking(props){
                         />                 
                     </div>                    
                         <Button type="submit" variant="contained" >Search</Button>   
-                 </form>   
+                </form>   
             </div>
         </div>
     </div> 

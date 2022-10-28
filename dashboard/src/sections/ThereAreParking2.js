@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import Rating from '@mui/material/Rating';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import React, { useState, useEffect } from 'react';
@@ -11,11 +12,12 @@ function ThereAreParking(props){
 	const [haylugar, sethaylugar] = useState(0)
 
 	const [cookies, setCookie, removeCookie] = useCookies(['calle','entre1','entre2','userId']);
-
+	const [rate, setrate] = useState(0)
 
 	const changeLugar= async (cant)=>{
 		console.log("Entro")
-		const url='http://10.40.12.21:4000/api/direcciones/' + cookies.calle + '/' + cookies.entre1 + '/' + cookies.entre2
+		const url='http://' + config.api.host +
+				'4000/api/direcciones/' + cookies.calle + '/' + cookies.entre1 + '/' + cookies.entre2
 		const requestOptions = {
 			method: 'PUT',
 			headers: {
@@ -27,8 +29,7 @@ function ThereAreParking(props){
 			})
 		}
 		try{
-			console.log("ENTRO")
-	      const response = await fetch(url,requestOptions)
+	    const response = await fetch(url,requestOptions)
 			const data = await response.json()
 			if(response.status == 200){
 				sethaylugar(cant)
@@ -39,6 +40,27 @@ function ThereAreParking(props){
 		}
 
 	}
+
+	const getRate = async (cant)=>{
+		let url = 'http://' + config.api.host + ''
+		const requestOptions = {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		}
+		try{
+	    const response = await fetch(url,requestOptions)
+			const data = await response.json()
+			if(response.status == 200){
+				sethaylugar(cant)
+			}
+		} catch(e){
+			sethaylugar(0)
+		}
+
+	}
+
 	useEffect(()=>{
 		const url = 'estoyEn/' + cookies.calle + '/' + cookies.entre1 + '/' + cookies.entre2
 		async function returnHayLugar(){
@@ -148,6 +170,9 @@ function ThereAreParking(props){
 							onClick={(e)=>{changeLugar(5)}}>
 							+4
 						</Button>
+						</Grid>
+						<Grid>
+						<Rating name="read-only" value={rate} readOnly/>
 						</Grid>
 					</Grid>
 				</Grid>

@@ -18,19 +18,15 @@ function Calificar(props){
 	// console.log("CALLESSSS:",calle,entre1,entre2)
 
 	const enviarCalificacion = values =>{
-		var url = "http://"+ config.api.host +":4000/api/direcciones/calificar/:calle/:entre1/:entre2/:score"
+		var url = "http://"+ config.api.host +
+					 ":4000/api/direcciones/calificar/"+ calle +
+					 "/" + entre1 + "/" + entre2 + "/" + values.puntuacion
 
 		const requestOptions = {
          method: 'GET',
          headers: {
             'Content-Type': 'application/json',
-         },
-			body:{
-				calle: calle,
-				entre1: entre1,
-				entre2: entre2,
-				calificacion: values.puntuacion
-			}
+         }
       }
 
 		fetch(url,requestOptions)
