@@ -166,23 +166,36 @@ router.get('/calificar/:calle/:entre1/:entre2/:score', async (req, res ) => {
       }
       else {
         querySnapshot.forEach(doc => {
-            console.log(doc.id, '=>', doc.data().aparcador); 
-            const trapito = db.collection("usuarios").doc(doc.data().aparcador);
-            trapito.update({
-                score: req.params.score
-            }).then(() => { 
-                console.log("Documento actualizado con score a aparcador");
-                res.json({status: res.statusCode, message: "Document successfully updated!"})
-            }).catch((error) => {
-                // The document probably doesn't exist.
-                console.error("Error updating document: ", error);
-                res.json({status: res.statusCode, message: "Error actualizando doc score aparcador ", error})
+            //console.log(doc.id, '=>', doc.data().aparcador); 
+            const idUsuario = doc.data().aparcador;            
+            const usuario = db.collection('usuarios').doc(idUsuario);
+            const getDoc = usuario.get().then(doc => {
+                if (!doc.exists) {
+                    console.log('No such document!');
+                    res.json({status: res.statusCode, message: "No such document!"})
+                } else {
+                    //console.log('Document data:', doc.data());
+                    if (doc.data().rol == "trapito") {
+                        console.log("Es un trapito");
+                        usuario.update({
+                            calificaciones: doc.data().calificaciones.concat(parseInt(req.params.score))
+                        });
+                        res.json({status: res.statusCode, message: "Calificacion agregada"})
+                    }
+                    else {
+                        console.log("No es un aparcador");
+                        res.json({status: res.statusCode, message: "No es un aparcador"})
+                    }
+                }
+            })
+            .catch(err => {
+                console.log('Error getting document', err);
+                res.json({status: res.statusCode, message: "Error getting document"})
             });
         });
-        }   
-
-
+        }
 })
+          
 
 
 module.exports = router;
