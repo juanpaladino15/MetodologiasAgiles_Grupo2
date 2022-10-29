@@ -1,21 +1,26 @@
 import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
+import Rating from '@mui/material/Rating';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom"
 import { useCookies } from 'react-cookie'
+import config from '../config'
+import ReplayIcon from '@mui/icons-material/Replay';
 
 function ThereAreParking(props){
 	//const {calle, entre1, entre2} = props
 	const [haylugar, sethaylugar] = useState(0)
 
 	const [cookies, setCookie, removeCookie] = useCookies(['calle','entre1','entre2','userId']);
-
+	const [rate, setRate] = useState(0)
 
 	const changeLugar= async (cant)=>{
 		console.log("Entro")
-		const url='http://10.40.12.21:4000/api/direcciones/' + cookies.calle + '/' + cookies.entre1 + '/' + cookies.entre2
+		const url='http://' + config.api.host +
+				':4000/api/direcciones/' + cookies.calle + '/' + cookies.entre1 + '/' + cookies.entre2
 		const requestOptions = {
 			method: 'PUT',
 			headers: {
@@ -27,8 +32,7 @@ function ThereAreParking(props){
 			})
 		}
 		try{
-			console.log("ENTRO")
-	      const response = await fetch(url,requestOptions)
+	    const response = await fetch(url,requestOptions)
 			const data = await response.json()
 			if(response.status == 200){
 				sethaylugar(cant)
@@ -39,6 +43,34 @@ function ThereAreParking(props){
 		}
 
 	}
+
+	const getScoring = async (cant)=>{
+		let url = 'http://' + config.api.host + ':4000/api/usuarios/' + cookies.userId + "/scoring"
+		const requestOptions = {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		}
+		try{
+	    const response = await fetch(url,requestOptions)
+		console.log("PASO1")
+			const data = await response.json()
+		console.log("PASO2",data)
+			if(response.status == 200){
+				let aux = 0
+				console.log("DATAS:",data)
+				data.scoring.forEach(s=>{aux += s})
+				console.log("SCORE DIVIDID",aux,data.scoring.length)
+				setRate(aux/data.scoring.length)
+			}
+		} catch(e){
+			console.log(e)
+			setRate(0)
+		}
+
+	}
+
 	useEffect(()=>{
 		const url = 'estoyEn/' + cookies.calle + '/' + cookies.entre1 + '/' + cookies.entre2
 		async function returnHayLugar(){
@@ -58,6 +90,7 @@ function ThereAreParking(props){
 				sethaylugar(0)
 			}
 		}
+		getScoring()
 	},[])
 
 	return(
@@ -148,6 +181,10 @@ function ThereAreParking(props){
 							onClick={(e)=>{changeLugar(5)}}>
 							+4
 						</Button>
+						</Grid>
+						<Grid item>
+							<Rating name="read-only" value={rate} precision={0.5} readOnly/>
+							<Chip icon={<ReplayIcon/>} onClick={getScoring} />
 						</Grid>
 					</Grid>
 				</Grid>

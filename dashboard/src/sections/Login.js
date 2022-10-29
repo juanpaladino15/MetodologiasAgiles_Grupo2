@@ -35,13 +35,17 @@ function Login(props){
 		try {
 			const response = await fetch(url,requestOptions)
 			const result = await response.json()
-			console.log(result)
-			setCookie("userId", result.id, { path: "/" });
-			setCookie("userRol", result.rol, { path: "/" });
-			if(result.rol == 'trapito'){
-				history.push("/whereiam")
+			if(response.status != 200){
+				setAlertMessage("usuario invalido")
 			} else {
-				history.push("/searchparking")
+				console.log(result)
+				setCookie("userId", result.id, { path: "/" });
+				setCookie("userRol", result.rol, { path: "/" });
+				if(result.rol == 'trapito'){
+					history.push("/whereiam")
+				} else {
+					history.push("/searchparking")
+				}
 			}
 		} catch(e){
 			console.log(e)
