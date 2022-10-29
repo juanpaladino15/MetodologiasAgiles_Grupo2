@@ -44,9 +44,9 @@ router.get("/:calle/:entre1/:entre2" , async (req, res) => {
 // Actualiza una direccion segun su calle
 router.put("/:calle/:entre1/:entre2", async(req,res)=>{
 	 const querySnapshot = await db.collection("direcciones")
-		.where('Calle','==',req.params.calle)
-		.where('entre1','==',req.params.entre1)
-		.where('entre2','==',req.params.entre2)
+		.where('Calle','==',parseInt(req.params.calle))
+		.where('entre1','==',parseInt(req.params.entre1))
+		.where('entre2','==',parseInt(req.params.entre2))
 		.get()
 
 	const direcciones = querySnapshot.docs.map(doc => ({
@@ -56,7 +56,15 @@ router.put("/:calle/:entre1/:entre2", async(req,res)=>{
 	console.log("Direcciones:",direcciones)
 
 	if(direcciones.length!=1){
-		res.status(404).send({message:"Direccion no encontrada"})
+		const direccion = await db.collection("direcciones").add({
+			Calle: parseInt(req.params.calle),
+			entre1: parseInt(req.params.entre1),
+			entre2: parseInt(req.params.entre2),
+			estado: req.body.estado,
+			aparcador: req.body.aparcador
+    })
+		console.log("AGREGANDO direccion")
+		res.send({message:"Dirección actualizada 2"})
 		return
 	}
 	const direccion = direcciones[0]
@@ -163,8 +171,7 @@ router.get('/calificar/:calle/:entre1/:entre2/:score', async (req, res ) => {
         console.log('No matching documents.');
         res.json({status: res.statusCode, message: "No matching documents."})
         //return;
-      }
-      else {
+    } else {
         querySnapshot.forEach(doc => {
             //console.log(doc.id, '=>', doc.data().aparcador); 
             const idUsuario = doc.data().aparcador;            
