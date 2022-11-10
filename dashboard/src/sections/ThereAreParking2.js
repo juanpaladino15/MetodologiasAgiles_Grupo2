@@ -44,6 +44,10 @@ function ThereAreParking(props){
 
 	}
 
+	const getPropinas = async(cant)=>{
+		ACA MEQUEDE
+	}
+
 	const getScoring = async (cant)=>{
 		let url = 'http://' + config.api.host + ':4000/api/usuarios/' + cookies.userId + "/scoring"
 		const requestOptions = {

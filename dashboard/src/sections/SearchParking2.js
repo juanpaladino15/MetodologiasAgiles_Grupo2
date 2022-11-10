@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from "react-router-dom"
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import GarageIcon from '@mui/icons-material/Garage';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Paper from '@mui/material/Paper';
@@ -16,7 +17,7 @@ import { db } from '../firebaseConfig/firebase'
 import Swal from 'sweetalert2'  //npm i sweetalert2
 
 function ItemParking(props){
-	const {calle, entre1, entre2, cant, medido} = props
+	const {calle, entre1, entre2, cant, medido, garage} = props
 
 	let history = useHistory();
 
@@ -31,6 +32,14 @@ function ItemParking(props){
 					</Tooltip>
 					:null
 				}
+				{
+					garage?
+					<Tooltip title='Garage'>
+						<GarageIcon />
+					</Tooltip>
+					:null
+				}
+
 			</Grid>
 			<Grid item xs={4}>
 				<Typography variant="h6">

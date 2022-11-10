@@ -1,6 +1,9 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
+import InputAdornment from '@mui/material/InputAdornment';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import Rating from '@mui/material/Rating';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -29,7 +32,13 @@ function Calificar(props){
          method: 'GET',
          headers: {
             'Content-Type': 'application/json',
-         }
+         },
+			body:JSON.parse(
+				{
+				score: values.puntuacion,
+				propina: values.propina
+				}
+			)
       }
 
 		fetch(url,requestOptions)
@@ -59,7 +68,7 @@ function Calificar(props){
 					backgroundColor:"#eeeeee",
 					marginTop: "30vh",
 					width: 500,
-					height: 187
+					height:300 
 				}}
 				
 				elevantion={3}
@@ -67,7 +76,8 @@ function Calificar(props){
 			>
 				<Formik
 					initialValues={{
-						puntuacion: 0
+						puntuacion: 0,
+						propina: 0,
 					}}
 					onSubmit={values=>{
 						console.log(values.puntuacion)
@@ -95,6 +105,23 @@ function Calificar(props){
     									setFieldValue("puntuacion", event.target.value);
   									}}
 								/>
+
+								<Typography component="legend">Agradece con una propina</Typography>
+								<Select
+									sx={{width:100}}
+									name='propina'
+									value={values.propina}
+									onChange={(event)=>{
+										setFieldValue("propina", event.target.value);
+									}}
+								>
+									<MenuItem value={25}>$ 25</MenuItem>
+									<MenuItem value={50}>$ 50</MenuItem>
+									<MenuItem value={75}>$ 75</MenuItem>
+									<MenuItem value={100}>$ 100</MenuItem>
+									<MenuItem value={150}>$ 150</MenuItem>
+									<MenuItem value={200}>$ 200</MenuItem>
+								</Select>
 
 								<Grid 
 									item
