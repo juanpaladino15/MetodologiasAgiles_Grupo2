@@ -30,7 +30,8 @@ router.get("/:calle/:entre1/:entre2" , async (req, res) => {
 		  entre2:parseInt(doc.data().entre2),
 		  Calle:parseInt(doc.data().Calle),
 		  estado:doc.data().estado,
-		  aparcador:doc.data().aparcador
+		  aparcador:doc.data().aparcador,
+		  medido:doc.data().medido
     }))
 
 	console.log("Buscando calles:",parseInt(req.params.calle) - 1,parseInt(req.params.calle) + 1)
@@ -61,7 +62,7 @@ router.put("/:calle/:entre1/:entre2", async(req,res)=>{
 			entre1: parseInt(req.params.entre1),
 			entre2: parseInt(req.params.entre2),
 			estado: req.body.estado,
-			aparcador: req.body.aparcador
+			aparcador: req.body.aparcador,
     })
 		console.log("AGREGANDO direccion")
 		res.send({message:"Dirección actualizada 2"})
