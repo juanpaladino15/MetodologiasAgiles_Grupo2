@@ -67,7 +67,8 @@ function Calificar(props){
 			>
 				<Formik
 					initialValues={{
-						puntuacion: 0
+						puntuacion: 0,
+						comment: ""
 					}}
 					onSubmit={values=>{
 						console.log(values.puntuacion)
@@ -95,6 +96,15 @@ function Calificar(props){
     									setFieldValue("puntuacion", event.target.value);
   									}}
 								/>
+
+								<Grid item>
+									<TextField
+									label='Deje un comentario'
+									name='comment'
+									value={values.comment}
+									onChange={handleChange}
+									/>
+								</Grid>
 
 								<Grid 
 									item
