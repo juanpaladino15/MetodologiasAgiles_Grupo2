@@ -30,7 +30,9 @@ router.get("/:calle/:entre1/:entre2" , async (req, res) => {
 		  entre2:parseInt(doc.data().entre2),
 		  Calle:parseInt(doc.data().Calle),
 		  estado:doc.data().estado,
-		  aparcador:doc.data().aparcador
+		  aparcador:doc.data().aparcador,
+		  medido:doc.data().medido,
+		  garage:doc.data().garage
     }))
 
 	console.log("Buscando calles:",parseInt(req.params.calle) - 1,parseInt(req.params.calle) + 1)
@@ -61,7 +63,7 @@ router.put("/:calle/:entre1/:entre2", async(req,res)=>{
 			entre1: parseInt(req.params.entre1),
 			entre2: parseInt(req.params.entre2),
 			estado: req.body.estado,
-			aparcador: req.body.aparcador
+			aparcador: req.body.aparcador,
     })
 		console.log("AGREGANDO direccion")
 		res.send({message:"Dirección actualizada 2"})
@@ -157,7 +159,7 @@ router.post("/update-direccion/:id", async (req, res) => {
 //Se obtiene el id del trapito y luego se agrega el score en el 
 //array del trapito.
 
-router.get('/calificar/:calle/:entre1/:entre2/:score', async (req, res ) => {
+router.get('/calificar/:calle/:entre1/:entre2', async (req, res ) => {
 
     //------------consulta direccion-----------
     const querySnapshot = await db.collection('direcciones', ref => ref.where('Calle', '==', parseInt(req.params.calle)))
@@ -185,7 +187,8 @@ router.get('/calificar/:calle/:entre1/:entre2/:score', async (req, res ) => {
                     if (doc.data().rol == "trapito") {
                         console.log("Es un trapito");
                         usuario.update({
-                            calificaciones: doc.data().calificaciones.concat(parseInt(req.params.score))
+                            calificaciones: doc.data().calificaciones.concat(parseInt(req.body.score)),
+									 propinas: parseInt(doc.data().propinas) + parseInt(req.body.propina)
                         });
                         res.json({status: res.statusCode, message: "Calificacion agregada"})
                     }
