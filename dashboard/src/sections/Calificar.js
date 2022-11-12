@@ -1,6 +1,7 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
+import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -77,6 +78,7 @@ function Calificar(props){
 				<Formik
 					initialValues={{
 						puntuacion: 0,
+						comment: ""
 						propina: 0,
 					}}
 					onSubmit={values=>{
@@ -105,6 +107,14 @@ function Calificar(props){
     									setFieldValue("puntuacion", event.target.value);
   									}}
 								/>
+								<Grid item>
+									<TextField
+									label='Deje un comentario'
+									name='comment'
+									value={values.comment}
+									onChange={handleChange}
+									/>
+								</Grid>
 
 								<Typography component="legend">Agradece con una propina</Typography>
 								<Select
