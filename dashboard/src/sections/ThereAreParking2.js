@@ -2,8 +2,12 @@ import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import Rating from '@mui/material/Rating';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom"
 import { useCookies } from 'react-cookie'
@@ -15,7 +19,9 @@ function ThereAreParking(props){
 	const [haylugar, sethaylugar] = useState(0)
 
 	const [cookies, setCookie, removeCookie] = useCookies(['calle','entre1','entre2','userId']);
-	const [rate, setRate] = useState(0)
+	const [rates, setRates] = useState([])
+	const [rateAverage, setRateAverage] = useState(0)
+	const [propinas, setPropinas] = useState(0)
 
 	const changeLugar= async (cant)=>{
 		console.log("Entro")
@@ -45,7 +51,27 @@ function ThereAreParking(props){
 	}
 
 	const getPropinas = async(cant)=>{
-		ACA MEQUEDE
+		let url = 'http://' + config.api.host + ':4000/api/usuarios/' + cookies.userId + "/propinas"
+		const requestOptions = {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		}
+		try{
+			const response = await fetch(url,requestOptions)
+			if(response.status == 200){
+				const data = await response.json()
+				if(data.propinas){
+					setPropinas(data.propinas)
+				} else {
+					setPropinas(0)
+				}
+			}
+		} catch(e){
+			console.log(e)
+		}
+
 	}
 
 	const getScoring = async (cant)=>{
@@ -57,22 +83,32 @@ function ThereAreParking(props){
 			}
 		}
 		try{
-	    const response = await fetch(url,requestOptions)
-		console.log("PASO1")
-			const data = await response.json()
-		console.log("PASO2",data)
+			const response = await fetch(url,requestOptions)
 			if(response.status == 200){
+				const data = await response.json()
 				let aux = 0
+				let auxR = []
 				console.log("DATAS:",data)
-				data.scoring.forEach(s=>{aux += s})
+				data.scoring.forEach(s=>{
+					aux += s.rate
+					auxR.push(
+						<Grid>
+							<Rating name="read-only" value={s.rate} precision={0.5} readOnly/>
+							<Typography>
+								s.comment
+							</Typography>
+						</Grid>
+					)
+				})
+				setRates(auxR)
 				console.log("SCORE DIVIDID",aux,data.scoring.length)
-				setRate(aux/data.scoring.length)
+				setRateAverage(aux/data.scoring.length)
 			}
 		} catch(e){
 			console.log(e)
-			setRate(0)
+			setRateAverage(0)
+			setRates([])
 		}
-
 	}
 
 	useEffect(()=>{
@@ -113,7 +149,7 @@ function ThereAreParking(props){
 						<Typography>
 							Me encuentro en:
 						</Typography>
-						<Typography>
+						<Typography variant='h6'>
 							{cookies.calle + " e /" + cookies.entre1 + " y " + cookies.entre2}
 						</Typography>
 					</Grid>
@@ -187,8 +223,31 @@ function ThereAreParking(props){
 						</Button>
 						</Grid>
 						<Grid item>
-							<Rating name="read-only" value={rate} precision={0.5} readOnly/>
+							<Typography>
+								Mi calificación actual
 							<Chip icon={<ReplayIcon/>} onClick={getScoring} />
+							</Typography>
+							<Accordion>
+								<AccordionSummary
+									expendIcon={<ExpandMoreIcon />}
+								>
+									<Rating name="read-only" value={rateAverage} precision={0.5} readOnly/>
+									
+								</AccordionSummary>
+								<AccordionDetails>
+									{rates}
+								</AccordionDetails>
+							</Accordion>
+						</Grid>
+						<Grid item>
+							<Grid container direction='column'>
+								<Typography variant="h8">
+									Mi propina total actual:
+								</Typography>
+								<Typography variant="h8">
+									{"$ " + propinas}
+								</Typography>
+							</Grid>
 						</Grid>
 					</Grid>
 				</Grid>

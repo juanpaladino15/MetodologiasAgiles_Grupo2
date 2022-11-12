@@ -13,6 +13,7 @@ import { Formik, Form } from 'formik';
 import Button from '@mui/material/Button';
 import { collection, where, getDocs, query } from 'firebase/firestore'
 import { db } from '../firebaseConfig/firebase'
+import config from '../config'
 
 import Swal from 'sweetalert2'  //npm i sweetalert2
 
@@ -71,7 +72,8 @@ function SearchParking(props){
 	const direccionesCollection = collection(db, "direcciones")
 
 	const search = async (values) => {
-		var url = "http://10.40.12.21:4000/api/direcciones/" + values.calle + "/" + values.entre1 + "/" + values.entre2
+		var url = "http://" + config.api.host + ":4000/api/direcciones/" +
+					values.calle + "/" + values.entre1 + "/" + values.entre2
 		const requestOptions = {
          method: 'GET',
          headers: {

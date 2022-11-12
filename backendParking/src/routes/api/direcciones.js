@@ -187,7 +187,7 @@ router.get('/calificar/:calle/:entre1/:entre2', async (req, res ) => {
                     if (doc.data().rol == "trapito") {
                         console.log("Es un trapito");
                         usuario.update({
-                            calificaciones: doc.data().calificaciones.concat(parseInt(req.body.score))
+                            calificaciones: doc.data().calificaciones.concat(parseInt(req.body.score)),
 									 propinas: parseInt(doc.data().propinas) + parseInt(req.body.propina)
                         });
                         res.json({status: res.statusCode, message: "Calificacion agregada"})
