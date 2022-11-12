@@ -76,6 +76,7 @@ function ThereAreParking(props){
 
 	const getScoring = async (cant)=>{
 		let url = 'http://' + config.api.host + ':4000/api/usuarios/' + cookies.userId + "/scoring"
+		console.log("URL:",url)
 		const requestOptions = {
 			method: 'GET',
 			headers: {
@@ -90,18 +91,19 @@ function ThereAreParking(props){
 				let auxR = []
 				console.log("DATAS:",data)
 				data.scoring.forEach(s=>{
-					aux += s.rate
+					aux = aux + parseInt(s.score)
 					auxR.push(
 						<Grid>
-							<Rating name="read-only" value={s.rate} precision={0.5} readOnly/>
+							<Rating name="read-only" value={s.score} precision={0.5} readOnly/>
 							<Typography>
-								s.comment
+								{s.comment}
 							</Typography>
 						</Grid>
 					)
 				})
 				setRates(auxR)
 				console.log("SCORE DIVIDID",aux,data.scoring.length)
+				console.log("aux:",aux,"data.scoring.length",data.scoring.length)
 				setRateAverage(aux/data.scoring.length)
 			}
 		} catch(e){

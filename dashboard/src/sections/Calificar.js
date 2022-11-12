@@ -27,17 +27,19 @@ function Calificar(props){
 	const enviarCalificacion = values =>{
 		var url = "http://"+ config.api.host +
 					 ":4000/api/direcciones/calificar/"+ calle +
-					 "/" + entre1 + "/" + entre2 + "/" + values.puntuacion
+					 "/" + entre1 + "/" + entre2
 
+		console.log("URL",url)
 		const requestOptions = {
-         method: 'GET',
+         method: 'POST',
          headers: {
             'Content-Type': 'application/json',
          },
-			body:JSON.parse(
+			body:JSON.stringify(
 				{
 				score: values.puntuacion,
-				propina: values.propina
+				propina: values.propina,
+				comment: values.comment
 				}
 			)
       }
@@ -78,8 +80,8 @@ function Calificar(props){
 				<Formik
 					initialValues={{
 						puntuacion: 0,
-						comment: ""
-						propina: 0,
+						comment: "",
+						propina: 0
 					}}
 					onSubmit={values=>{
 						console.log(values.puntuacion)

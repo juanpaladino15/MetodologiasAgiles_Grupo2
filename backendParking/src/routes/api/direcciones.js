@@ -153,29 +153,26 @@ router.post("/update-direccion/:id", async (req, res) => {
 
 })
 
-//calificar Dado calle, entre1, entre2 y un score (del 1 al 5) 
-//se busca en la coleccion de calles por los datos 
-//calle, entre1 y entre2. 
-//Se obtiene el id del trapito y luego se agrega el score en el 
-//array del trapito.
-
-router.get('/calificar/:calle/:entre1/:entre2', async (req, res ) => {
+/* Se califica al trapito con calificacion, comentario y posible propina */
+router.post('/calificar/:calle/:entre1/:entre2', async (req, res ) => {
 
     //------------consulta direccion-----------
-    const querySnapshot = await db.collection('direcciones', ref => ref.where('Calle', '==', parseInt(req.params.calle)))
+    //const querySnapshot = await db.collection('direcciones', ref => ref.where('Calle', '==', parseInt(req.params.calle)))
+    const querySnapshot = await db.collection('direcciones')
+    .where('Calle', '==', parseInt(req.params.calle))
     .where('entre1', '==', parseInt(req.params.entre1))
-    .where('entre2', '==', parseInt(req.params.entre2)).get();
+    .where('entre2', '==', parseInt(req.params.entre2))
+	 .get();
     
-   
-    //console.log(querySnapshot); 
-
     if (querySnapshot.empty) {
         console.log('No matching documents.');
         res.json({status: res.statusCode, message: "No matching documents."})
         //return;
     } else {
         querySnapshot.forEach(doc => {
-            //console.log(doc.id, '=>', doc.data().aparcador); 
+
+            console.log("Entro al foreach:",doc.data()); 
+
             const idUsuario = doc.data().aparcador;            
             const usuario = db.collection('usuarios').doc(idUsuario);
             const getDoc = usuario.get().then(doc => {
@@ -187,8 +184,15 @@ router.get('/calificar/:calle/:entre1/:entre2', async (req, res ) => {
                     if (doc.data().rol == "trapito") {
                         console.log("Es un trapito");
                         usuario.update({
-                            calificaciones: doc.data().calificaciones.concat(parseInt(req.body.score)),
-									 propinas: parseInt(doc.data().propinas) + parseInt(req.body.propina)
+                            //calificaciones: doc.data().calificaciones.concat(parseInt(req.body.score)),
+                            calificaciones: doc.data().calificaciones.concat(
+										{
+											score: req.body.score,
+											comment: req.body.comment,
+										}
+									 ),
+								//	 propinas:0
+									 propinas: doc.data().propinas + req.body.propina
                         });
                         res.json({status: res.statusCode, message: "Calificacion agregada"})
                     }
