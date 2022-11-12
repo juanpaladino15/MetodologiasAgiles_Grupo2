@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { useHistory } from "react-router-dom"
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import GarageIcon from '@mui/icons-material/Garage';
 import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -10,21 +13,39 @@ import { Formik, Form } from 'formik';
 import Button from '@mui/material/Button';
 import { collection, where, getDocs, query } from 'firebase/firestore'
 import { db } from '../firebaseConfig/firebase'
+import config from '../config'
 
 import Swal from 'sweetalert2'  //npm i sweetalert2
 
 function ItemParking(props){
-	const {calle, entre1, entre2, cant} = props
+	const {calle, entre1, entre2, cant, medido, garage} = props
 
 	let history = useHistory();
 
 	return(
 		<Grid item container>
-			<Grid item xs={4}>
-				{calle + " e/" + entre1 + " y " + entre2}
-			</Grid>
 			<Grid item xs={5}>
+				{calle + " e/" + entre1 + " y " + entre2 + " "}
+				{
+					medido?
+					<Tooltip title='Medido'>
+						<AccessAlarmIcon />
+					</Tooltip>
+					:null
+				}
+				{
+					garage?
+					<Tooltip title='Garage'>
+						<GarageIcon />
+					</Tooltip>
+					:null
+				}
+
+			</Grid>
+			<Grid item xs={4}>
+				<Typography variant="h6">
 				{cant}
+				</Typography>
 			</Grid>
 			<Grid item xs={3}>
 				<Button
@@ -51,8 +72,8 @@ function SearchParking(props){
 	const direccionesCollection = collection(db, "direcciones")
 
 	const search = async (values) => {
-		var url = "http://10.40.12.21:4000/api/direcciones/" + values.calle + "/" + values.entre1 + "/" + values.entre2
-		//var url = "http://10.40.12.21:4000/api/direcciones/"
+		var url = "http://" + config.api.host + ":4000/api/direcciones/" +
+					values.calle + "/" + values.entre1 + "/" + values.entre2
 		const requestOptions = {
          method: 'GET',
          headers: {
@@ -72,6 +93,7 @@ function SearchParking(props){
 					entre1={d.entre1}
 					entre2={d.entre2}
 					cant={d.estado}
+					medido={d.medido}
 				/>)
 			})
 			setDirecciones(items)

@@ -77,6 +77,12 @@ router.get('/:id/scoring', async (req, res) => {
     res.send({scoring:usuario.data().calificaciones});
 });
 
+router.get('/:id/propinas', async (req, res) => {
+    const usuario = await db.collection('usuarios').doc(req.params.id).get()
+	console.log("PROPINAS:",usuario.data().propinas)
+    res.send({propinas:usuario.data().propinas});
+});
+
 
 router.get('/:id', async (req, res) => {
     const usuario = await db.collection('usuarios').doc(req.params.id).get()
