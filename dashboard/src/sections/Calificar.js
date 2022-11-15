@@ -37,8 +37,8 @@ function Calificar(props){
          },
 			body:JSON.stringify(
 				{
-				score: values.puntuacion,
-				propina: values.propina,
+				score: Number(values.puntuacion),
+				propina: Number(values.propina),
 				comment: values.comment
 				}
 			)
