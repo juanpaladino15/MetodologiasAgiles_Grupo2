@@ -58,10 +58,7 @@ router.put("/:calle/:entre1/:entre2", async(req,res)=>{
 	console.log("Direcciones:",direcciones)
 
 	if(direcciones.length!=1){
-		const direccion = await db.collection("direcciones").add({
-			Calle: parseInt(req.params.calle),
-			entre1: parseInt(req.params.entre1),
-			entre2: parseInt(req.params.entre2),
+		const direccion = await db.collection("direcciones").update({
 			estado: req.body.estado,
 			aparcador: req.body.aparcador,
     })
@@ -118,7 +115,7 @@ router.get('/edit-direccion/:id', async (req, res) => {
 })
 
 //borra un direccion eliminandola de la bd
-router.get('/delete-direccion/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     
     const doc = await db.collection('direcciones').doc(req.params.id).delete()    
     //---------------retorna menssage luego de cargar------------
@@ -191,7 +188,7 @@ router.post('/calificar/:calle/:entre1/:entre2', async (req, res ) => {
 											comment: req.body.comment,
 										}
 									 ),
-								//	 propinas:0
+									//propinas:0
 									 propinas: doc.data().propinas + req.body.propina
                         });
                         res.json({status: res.statusCode, message: "Calificacion agregada"})

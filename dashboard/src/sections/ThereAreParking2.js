@@ -133,6 +133,7 @@ function ThereAreParking(props){
 			}
 		}
 		getScoring()
+		getPropinas()
 	},[])
 
 	return(
@@ -227,7 +228,7 @@ function ThereAreParking(props){
 						<Grid item>
 							<Typography>
 								Mi calificación actual
-							<Chip icon={<ReplayIcon/>} onClick={getScoring} />
+							<Chip icon={<ReplayIcon/>} onClick={()=>{getScoring();getPropinas()}} />
 							</Typography>
 							<Accordion>
 								<AccordionSummary

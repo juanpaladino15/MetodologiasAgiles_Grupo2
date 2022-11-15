@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory } from "react-router-dom"
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import GarageIcon from '@mui/icons-material/Garage';
@@ -62,14 +62,44 @@ function ItemParking(props){
 	)
 }
 
+function TimeReverse(props){
+	const {update, search} = props
+	const [counter, setCounter] = useState(5)
+
+	useEffect(()=>{
+		if(update > 0){
+			setTimeout(() => {
+				setCounter(counter - 1)
+				if(counter == 0){
+					console.log("TERMINO")
+					search()
+					setCounter(5)
+				}
+			}, 1000)
+		}
+	},[counter])
+
+	return(
+		<Grid>
+			actualizacion en: 
+			<span style={{ fontWeight: 'bold' }}>
+				{" " + counter + " seg"}
+			</span>
+		</Grid>
+	)
+}
+
 function SearchParking(props){
-	const [ calle, setCalle ] = useState('')
-	const [ entre1, setEntre1 ] = useState('')
-	const [ entre2, setEntre2 ] = useState('')
+	const [calle, setCalle] = useState('')
+	const [entre1, setEntre1] = useState('')
+	const [entre2, setEntre2] = useState('')
 	const [direcciones, setDirecciones] = useState([])
 	const [message, setMessage] = useState(null)
+	const [update, setUpdate] = useState(0)
 
 	const direccionesCollection = collection(db, "direcciones")
+
+	console.log("Recuperando datos")
 
 	const search = async (values) => {
 		var url = "http://" + config.api.host + ":4000/api/direcciones/" +
@@ -126,6 +156,7 @@ function SearchParking(props){
 						entre2:''
 					}}
 					onSubmit={values=>{
+						setUpdate(1)
 						search(values)
 					}}
 					render={({values,setFieldValue,handleChange})=>(
@@ -156,12 +187,19 @@ function SearchParking(props){
 									/>
 								</Grid>
 								<Grid item xs={12}>
-									<Button
-										type='submit'
-										variant='contained'
-									>
-										Buscar
-									</Button>
+									<Grid container direction="row">
+										<Grid item xs={5}>
+											<Button
+												type='submit'
+												variant='contained'
+											>
+												Buscar
+											</Button>
+										</Grid>
+										<Grid container item xs={7} alignItems='center'>
+											{update>0?<TimeReverse update={update} search={()=>search(values)}/>:null}
+										</Grid>
+									</Grid>
 								</Grid>
 							</Grid>
 						</Form>
@@ -172,6 +210,7 @@ function SearchParking(props){
 				<Typography>
 					Hemos encontrado los siguiente lugares
 				</Typography>
+				
 				<Grid>
 					{direcciones.length>0?
 						<Grid spacing={2}>
