@@ -124,6 +124,7 @@ function SearchParking(props){
 					entre2={d.entre2}
 					cant={d.estado}
 					medido={d.medido}
+					garage={d.garage}
 				/>)
 			})
 			setDirecciones(items)

@@ -91,7 +91,9 @@ function ThereAreParking(props){
 				let auxR = []
 				console.log("DATAS:",data)
 				data.scoring.forEach(s=>{
-					aux = aux + parseInt(s.score)
+					console.log(aux," + ", s.score)
+					aux = aux + s.score
+					console.log("total:",aux)
 					auxR.push(
 						<Grid>
 							<Rating name="read-only" value={s.score} precision={0.5} readOnly/>
