@@ -1,0 +1,27 @@
+version: '2.2'
+services:
+ node:
+  container_name: nodejs
+  build: 
+    context: .
+    dockerfile: ./docker/nodejs/Dockerfile
+  volumes:
+    - ./backendParking:/app
+  ports:
+    - "4000:4000"
+  networks:
+    - parking
+ react:
+  container_name: reactjs
+  build: 
+    context: .
+    dockerfile: ./docker/react/Dockerfile
+  volumes:
+    - ./frontendParking:/app
+  ports:
+    - "3000:3000"
+  networks:
+    - parking    
+networks:
+  parking:
+    name: public

@@ -1,6 +1,6 @@
 const config = {
 	api: {
-		host: "10.40.12.21"
+		host: "127.0.0.1",
 	}
 }
 
