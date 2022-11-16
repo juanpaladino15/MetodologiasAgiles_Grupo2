@@ -4,12 +4,10 @@ LABEL maintainer="emanuelrodriguez644@gmail.com"
 
 WORKDIR /app
 
-COPY ./backendParking .
+COPY ./dashboard .
 
 RUN npm install
 
-RUN npm start
-
-
+CMD [ "npm", "start" ]
 
 EXPOSE 3000/tcp
